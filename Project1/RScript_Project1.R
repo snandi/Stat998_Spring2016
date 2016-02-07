@@ -26,3 +26,11 @@ str(Data)
 ## Some basic diagnostics
 ########################################################################
 length(unique(Data$SampleID))
+length(unique(Data$cow.id))
+names(Data)[names(Data) == 'cow.id'] <- 'CowID'
+names(Data)[names(Data) == 'body.weight..lb'] <- 'BodyWeight'
+names(Data)[names(Data) == ' body.condition.score..range.1..low..to.5..high..'] <- 'Body_Condition_Score'
+
+            
+            
+          
