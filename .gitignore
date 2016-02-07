@@ -22,3 +22,9 @@ Data
 Data/*
 RData
 RData/*
+*.aux
+*.log
+*.out
+*.pdf
+Diesel/*.aux
+
