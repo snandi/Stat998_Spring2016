@@ -1,0 +1,223 @@
+\documentclass[11pt,a4paper]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Input header file 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{../../../TexScripts/HeaderfileTexDocs}
+
+%%%%%%%%%%%%%%%%%%% To change the margins and stuff %%%%%%%%%%%%%%%%%%%
+\geometry{left=0.8in, right=0.9in, top=0.9in, bottom=0.8in}
+%\setlength{\voffset}{0.5in}
+%\setlength{\hoffset}{-0.4in}
+%\setlength{\textwidth}{7.6in}
+%\setlength{\textheight}{10in}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\title{Assignment 1}
+\author{Subhrangshu Nandi\\
+  Stat 998; Spring 2016}
+\date{January 28, 2016}
+%\date{}
+
+\maketitle
+
+\section*{Problem 1}
+
+\subsection*{Summary}
+The goal of this study is to determine the effect of fertilizer and irrigation on the growth rate of young snap bean plants. There were 36 fields available in central Wisconsin for this study. It is known that the crop planted on the field in the previous year can also be an important factor in determining the growth rate. Twelve fields were selected for each of three different crops planted in the previous year: soy beans, corn, and oats. For each of the 12 fields within each group, one of 12 different combinations of level of fertilizer and level of irrigation was randomly selected. The total growth in centimeters for the first 3 days from the start of the study for all these 36 fields were recorded. After fitting a 3-way anova model, it was concluded that if soybeans was grown in the fields in the previous year, instead of corn or oats, the growth rate is significantly lower. Irrigation level 1.0 yields higher growth rate than level 0. Higher amount of fertilizers produced higher growth rates. 
+
+\subsection*{Data exploration}
+The recorded growths of the snap bean plants (the response variable) lie between 0.23 cm and 0.97 cm, the average being 0.50 cm, and median 0.55 cm. There does not seem to be any outlier (unusually high or low) in this response variable. Below are some plots that exhibit the association between growths and fertilizer level, irrigation level and previous year's crop, respectively. 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.3, page = 1]{Plot1.pdf}
+\includegraphics[scale = 0.3, page = 2]{Plot1.pdf}
+\includegraphics[scale = 0.3, page = 3]{Plot1.pdf}
+\end{center}
+\caption{Growth rates vs fertilizer level, irrigation level and previous year's crop}
+\label{fig:Fig1_1}
+\end{figure}
+It appears from fig \ref{fig:Fig1_1} that the fields where soybeans were grown previous year, the growth of snap beans is lower than the ones where corn or oats were grown. It also appears that increasing fertilizer levels could result in increasing growths of snap peas. Irrigation level, however, does not seem to impact the growths. Upon further observation, when broken down by previous year's crops and fertilizer, and irrigation, the plots below reveal more information about the growths of snap bean plants.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.4, page = 4]{Plot1.pdf}
+\includegraphics[scale = 0.4, page = 5]{Plot1.pdf}
+\end{center}
+\caption{Growth rates vs fertilizer level, irrigation level and previous year's crop}
+\label{fig:Fig1_2}
+\end{figure}
+In fig \ref{fig:Fig1_2} it appears that in the fields where soybeans were grown previous year, the growth of snap beans is not affected by fertilizer or irrigation levels. In fields where oats were grown previous year, the growth seems higher than the ones where corn was grown. And they seem to increase with increasing irrigation and fertilizer levels. 
+
+\subsection*{Statistical Analysis}
+To model relationship between the growth of snap beans and fertilizer levels, irrigation levels and previous year's crop, we used 3-way analysis of variance (ANOVA). The following assumptions were made, before fitting the model:
+\begin{enumerate}
+\item The responses were assumed to be from a normal distribution. Without any obvious outliers this assumption is not unreasonable.
+\item The fields where the different crops were grown previous year, are assumed to be identical. This means that the 12 soybean fields were identical to each other and to the ones where corn or oats were grown.
+\item The snap bean seeds that were planted in these 36 fields were assumed to be identical. 
+\end{enumerate}
+After considering several models, the following model was concluded to best explain the effect of fertilizer, irrigation and previous year's plant on the growth rate of young snap bean plants. 
+\[ Y_{ijk} = \mu + F_i + I_j + C_k + (FC)_{(ik)} + \epsilon_{ijk} \]
+$F_i: (i = 1, 2, 3, 4)$ corresponds to the 4 levels of fertilizers \\
+$I_j: (j = 1, 2, 3)$ corresponds to the 3 levels of irrigation \\
+$C_k: (k = 1, 2, 3)$ corresponds to the 3 crops planted previous year
+
+\subsection*{Results}
+Below is the ANOVA table of the model described above. It shows that all the factors, levels of fertilizer, levels of irrigation, previous year's crop impact the growth of snap beans, with statistical significance. The p-values are smaller than the accepted significance level 0.05. 
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Sun Jan 24 18:50:59 2016
+\begin{table}[H]
+\centering
+\begin{tabular}{lrrrrr}
+  \hline
+ & Df & Sum Sq & Mean Sq & F value & Pr($>$F) \\ 
+  \hline
+  Fertilizer & 3 & 0.34 & 0.11 & 36.02 & 0.0000 \\ 
+  Irrigation & 2 & 0.04 & 0.02 & 5.64 & 0.0106 \\ 
+  Crop & 2 & 0.89 & 0.45 & 143.07 & 0.0000 \\ 
+  Fertilizer:Crop & 6 & 0.14 & 0.02 & 7.27 & 0.0002 \\ 
+  Residuals & 22 & 0.07 & 0.00 &  &  \\ 
+   \hline
+\end{tabular}
+\caption{Anova table}
+\end{table}
+
+The table below illustrates the quantitative relationship between the different levels of the factors and growth of snap beans. 
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Sun Jan 24 18:48:44 2016
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrl}
+  \hline
+ & Estimate & Std. Error & t value & p-value \\ 
+  \hline
+  (Intercept) & 0.2603 & 0.0348 & 7.47 & 0.0000$^{***}$ \\ 
+  Fertilizer 3.2 & 0.0700 & 0.0456 & 1.53 & 0.1390 \\ 
+  Fertilizer 4 & 0.0667 & 0.0456 & 1.46 & 0.1579 \\ 
+  Fertilizer 4.8 & 0.0467 & 0.0456 & 1.02 & 0.3173 \\ 
+  Irrigation 0.4 & 0.0242 & 0.0228 & 1.06 & 0.3007 \\ 
+  Irrigation 1 & 0.0750 & 0.0228 & 3.29 & 0.0033$^{***}$ \\ 
+  Crop Corn & 0.1333 & 0.0456 & 2.92 & 0.0079$^{***}$ \\ 
+  Crop Oats & 0.1933 & 0.0456 & 4.24 & 0.0003$^{***}$ \\ 
+  Fertilizer 3.2:Crop Corn & 0.0300 & 0.0645 & 0.47 & 0.6464 \\ 
+  Fertilizer 4:Crop Corn & 0.1033 & 0.0645 & 1.60 & 0.1234 \\ 
+  Fertilizer 4.8:Crop Corn & 0.2700 & 0.0645 & 4.19 & 0.0004$^{***}$ \\ 
+  Fertilizer 3.2:Crop Oats & 0.1367 & 0.0645 & 2.12 & 0.0456$^{**}$ \\ 
+  Fertilizer 4:Crop Oats & 0.2267 & 0.0645 & 3.51 & 0.0020$^{***}$ \\ 
+  Fertilizer 4.8:Crop Oats & 0.3933 & 0.0645 & 6.10 & 0.0000$^{***}$ \\ 
+  \hline
+\end{tabular}
+\caption{Linear regression model fit results, *** (pvalue $< 0.01$), ** (pvalue $< 0.05$)}
+\label{tab:Tab1_2}
+\end{table}
+From table \ref{tab:Tab1_2} it is evident that irrigation 1.0 yields 0.075 higher growth rate than irrigation 0. If corn is grown in the previous year, as opposed to soybeans, the growth rate is 0.133 higher. If oats is grown in the previous year, as opposed to soybeans, the growth rate is 0.193 higher. Fertilizers and crops grown in previous years together seem to have significant impact on growth rate. A diagnostic plot of the residuals concur with the assumptions.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.4, page = 6]{Plot1.pdf}
+\end{center}
+\caption{Residual plot}
+\end{figure}
+
+
+\newpage
+\section*{Problem 2}
+\subsection*{Summary}
+An experiment was conducted to compare the effects of four different soil additives on the assimilation of a particular complex molecule containing phosphorous in the roots of corn plants. The 
+amount of this molecule is determined by a fairly expensive chemical analysis on a 5 mg portion of ground-up root material. The results of the analysis are given as concentrations in parts per
+million (ppm). A completely randomized experiment was conducted with repeated measurements (two) of 12 pots assigned to 4 soil additives. After fitting the data with a mixed effects model it was concluded that soil additives (1) and (2) yield lower concentrations of phosphorus containing molecules in comparison to additive (4), and additive (2) yield lower in comparison to additive (3). 
+
+\subsection*{Data exploration}
+The four soil additives selected for the experiment were
+\begin{enumerate}
+\item a standard mixture of inorganic material that includes some phosphorous
+\item a new blend of inorganic material with no added phosphorous
+\item the same new blend as in (2) with 1\% (by weight) phosphorous supplement
+\item the same new blend as in (2) with a 2\% (by weight) phosphorous supplement
+\end{enumerate}
+Each of the treatments was applied to three randomly selected large pots that are otherwise identically prepared. Newly germinated corn plants were planted in the pots. The twelve pots were randomly located in an environmentally controlled growth chamber. The pots are all watered daily. This is a completely randomized set up. The observations of the outcome can also be assumed to be independent of each other. At the end of 15 days the roots from each plant were removed and ground up. Two 5 mg portions from each plant were randomly taken from the ground-up root material and analyzed for amount of the particular complex molecule containing phosphorous. Both these measurements from the same pot could be highly correlated. Below is an exploratory plot of the measured molecule concentrations for different soil additives. 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.4, page = 1]{Plot2.pdf}
+\end{center}
+\caption{Concentration of molecules containing phosporus vs different soil additives}
+\label{fig:Fig2_1}
+\end{figure}
+In fig \ref{fig:Fig2_1}, the points with the same shape correspond to the same pot. Notice that measurement from the same pot are strongly correlated. The variabilities of concentrations in different additive groups seem different. A log transformation of the response could alleviate this problem. 
+
+\subsection*{Statistical Analysis}
+To estimate the effect of different soil additives on the concentration of the particular complex molecule, a mixed effect model was used. The ``between pot'' variability was considered a random effect. The measurement variability was considered as fixed effect. 
+\[ \log(Y_{ijk}) = \mu + A_i + P_{ij} + \epsilon_{ijk} \]
+$A_i: (i = 1, 2, 3, 4)$ corresponds to the 4 soil additives \\
+$P_{ij}: (j = 1, 2, 3)$ represent the ``between pot'' variation. $P_{ij} \sim N(0, \sigma_p^2)$ \\
+$\epsilon_{ijk} \sim N(0, \sigma_e^2): (k = 1, 2)$ \\
+$P_{ij}\  \indep\  \epsilon_{ijk},\ \  \forall i, j, k$ \\
+
+Since this was a balanced design, the degrees of freedom can be estimated as follows:
+\begin{table}[H]
+\centering
+\begin{tabular}{lc}
+  \hline
+  Variable & Df \\ 
+  \hline
+  Additive (treatment) & 3 \\ 
+  Pot error & 8 \\ 
+  Measurement error & 12 \\
+  \hline
+  Total & 23\\
+  \hline
+\end{tabular}
+\caption{Anova table}
+\end{table}
+
+In addition to these factors, a linear or quadratic contrast could be tested. But, since the phosporus content in type 1 of the additive is unknown, this factor was not considered an ordered factor. 
+
+\subsection*{Results}
+Below are the fixed effects of the model fit:
+\begin{table}[H]
+\centering
+\begin{tabular}{lccccl}
+\hline
+            & Estimate & Std. Error & df & t value & p-value \\
+(Intercept) & 0.6826   & 0.1454     & 8  & 4.693   & 0.0016$^{**}$ \\
+Additive2   & -0.2230  & 0.2057     & 8  & -1.084  & 0.3099 \\
+Additive3   & 0.3372   & 0.2057     & 8  & 1.639   & 0.1398 \\
+Additive4   & 0.6136   & 0.2057     & 8  & 2.983   & 0.0175$^{*}$ \\ 
+\hline
+\end{tabular}
+\caption{Fixed effects of soil additives}
+\label{tab:Tab2_2}
+\end{table}
+
+From table \ref{tab:Tab2_2}, it can be concluded that Additive (4) is statistically significantly different from Additive (1). A post-hoc pairwise comparison is necessary to detect difference in effects of the other additives. 
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Thu Jan 28 00:25:21 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrrrrl}
+  \hline
+ & Estimate & Std Error & DF & t-value & Lower CI & Upper CI & p-value \\ 
+  \hline
+  Additive 1 - 2 & 0.22 & 0.21 & 8.00 & 1.08 & -0.25 & 0.70 & 0.31 \\ 
+  Additive 1 - 3 & -0.34 & 0.21 & 8.00 & -1.64 & -0.81 & 0.14 & 0.14 \\ 
+  Additive 1 - 4 & -0.61 & 0.21 & 8.00 & -2.98 & -1.09 & -0.14 & 0.02$^{*}$ \\ 
+  Additive 2 - 3 & -0.56 & 0.21 & 8.00 & -2.72 & -1.03 & -0.09 & 0.03$^{*}$ \\ 
+  Additive 2 - 4 & -0.84 & 0.21 & 8.00 & -4.07 & -1.31 & -0.36 & 0.00$^{**}$ \\ 
+  Additive 3 - 4 & -0.28 & 0.21 & 8.00 & -1.34 & -0.75 & 0.20 & 0.22 \\ 
+   \hline
+\end{tabular}
+\caption{Pairwise comparison of soil additives}
+\label{tab:Tab2_3}
+\end{table}
+From table \ref{tab:Tab2_3}, it is evident that in addition to additives (1) and (4), additives (2) \& (3) and additives (2) \& (4) differ significantly. Concentration of molecule is 0.61 ppm lower in additive (1) when compared to (4). Concentration of molecule is 0.56 ppm lower in additive (2) when compared to (3). Concentration of molecule is 0.84 ppm lower in additive (2) when compared to (4). A $\chi^2$ test confirms that the presence of the random effect to control for the pot-to-pot variability yields better fit. The test statistic is 18.35 with p-value 0, with 1 df. The The estimated standard errors of the model are: $\sigma_p^2 = 0.2451$ and $\sigma_e^2 = 0.0824$. The residual plot below concurs with the models assumptions.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.4, page = 2]{Plot2.pdf}
+\end{center}
+\caption{Residual plot}
+\label{fig:Fig2_2}
+\end{figure}
+
+\end{document}
+
+
