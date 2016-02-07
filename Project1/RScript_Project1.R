@@ -16,20 +16,17 @@ source('~/RScripts/fn_Library_SN.R')
 ########################################################################
 RScriptPath <- '~/Courses/Stat998_Spring2016/Project1/'
 
-Filename <- paste0(RScriptPath, 'data_set1.csv')
+Filename <- paste0(RScriptPath, 'data_set1_sn.csv')
 Data <- read.csv(Filename, header = T)
 
-str(Data)
+dim(Data)
 ## 59 observations 1083 covariates
-
+head(names(Data))
 ########################################################################
 ## Some basic diagnostics
 ########################################################################
 length(unique(Data$SampleID))
 length(unique(Data$cow.id))
-names(Data)[names(Data) == 'cow.id'] <- 'CowID'
-names(Data)[names(Data) == 'body.weight..lb'] <- 'BodyWeight'
-names(Data)[names(Data) == ' body.condition.score..range.1..low..to.5..high..'] <- 'Body_Condition_Score'
 
             
             
