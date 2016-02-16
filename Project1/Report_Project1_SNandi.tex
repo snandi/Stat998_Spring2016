@@ -1,0 +1,62 @@
+\documentclass[12pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Input header file 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{../../../TexScripts/HeaderfileTexDocs}
+
+%%%%%%%%%%%%%%%%%%% To change the margins and stuff %%%%%%%%%%%%%%%%%%%
+\geometry{left=0.8in, right=0.9in, top=0.9in, bottom=0.8in}
+%\setlength{\voffset}{0.5in}
+%\setlength{\hoffset}{-0.4in}
+%\setlength{\textwidth}{7.6in}
+%\setlength{\textheight}{10in}
+\doublespacing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\title{Predicting Fatty Acid Concentration}
+
+\author{Subhrangshu Nandi \\
+	snandi@wisc.edu \\	
+	Stat 998; Spring 2016}
+\date{February 23, 2016}
+%\date{}
+
+\maketitle
+
+\section*{Summary}\label{Sec_Summary}
+
+\section*{Data exploration} \label{Sec_Data}
+Before analyzing the data, the missing value for the variable ``Days\_In\_Milk'' was imputed by fitting a linear model between cow characteristics and ``Days\_In\_Milk''. The imputed value was $29.2126$. The details of this model fit is discussed in the Appendix. 
+
+\section*{Statistical methodology} \label{Sec_Methods}
+
+\section*{Results} \label{Sec_Results}
+
+\newpage
+\section*{Appendix} \label{Appendix}
+To impute the missing value for ``Days\_In\_Milk'', the following linear model was fit:
+\[ \text{Dry\_Matter\_Intake} = \beta_0 + \beta_1 \text{BodyWeight} + \beta_2 \text{Body\_Condition\_Score} + \beta_3 \text{Parity} + \beta_4 \text{Milk\_Yield}  \]
+Below are the coefficients. The overall $R^2 = 0.49$. The imputed value for Dry\_Matter\_Intake was $29.2126$. 
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Mon Feb 15 23:08:50 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+  & Estimate & Std. Error & t value & p-value \\ 
+  \hline
+ (Intercept) & 16.3233 & 5.1179 & 3.19 & 0.0024 \\ 
+  BodyWeight & 0.0063 & 0.0034 & 1.84 & 0.0710 \\ 
+  Body\_Condition\_Score & -2.6687 & 1.2763 & -2.09 & 0.0413 \\ 
+  Parity & 1.5763 & 0.6980 & 2.26 & 0.0281 \\ 
+  Milk\_Yield & 0.0519 & 0.0260 & 2.00 & 0.0511 \\ 
+  \hline
+\end{tabular}
+\caption{Model fit between Dry\_Matter\_Intake and other cow characteristics}
+\end{table}
+
+\end{document}
+
+
