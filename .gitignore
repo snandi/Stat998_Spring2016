@@ -27,4 +27,6 @@ RData/*
 *.out
 *.pdf
 Diesel/*.aux
-
+*.png
+*.jpg
+*.jpeg
