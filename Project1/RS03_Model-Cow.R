@@ -40,6 +40,9 @@ Cols_Milk <- c(
   "Nitrogen"
 )
 
+Data1$Parity2 <- (Data1$Parity)^2
+Data1$UniqueCow <- (Data1$Parity == 4)
+
 M15_1 <- lm(C15_0 ~ Wt + BC_Score + Parity + Days + Intake + Milk_Yield, data = Data1)
 summary(M15_1)
 
@@ -50,7 +53,27 @@ M15_3 <- lm(C15_0 ~ Wt + BC_Score + Parity + Days + Intake + Milk_Yield +
               Fat + Protein + Lactose + Nitrogen, data = Data1)
 summary(M15_3)
 
-step(object = M15_3, direction = 'backward', k = log(nrow(Data1)))
+M15_4 <- lm(C15_0 ~ BC_Score + Parity + Parity2 + Days + Milk_Yield + 
+              Fat + Protein + Lactose, data = Data1)
+summary(M15_4)
+#plot(M15_4)
+
+M15_5 <- lm(C15_0 ~ Wt + BC_Score + Parity + Parity2 + Days + Intake + Milk_Yield + 
+              Fat + Protein + Lactose + Nitrogen, data = Data1)
+summary(M15_5)
+
+anova(M15_4, M15_5)
+
+#attr (Data1$Parity, "contrasts") <- contr.poly (2) 
+
+step(object = M15_4, direction = 'backward', k = log(nrow(Data1)))
+Data1$UniqueCow31 <- rownames(Data1) == "31"
+Final15 <- M15_4 <- lm(C15_0 ~ BC_Score + Parity + Parity2 + Days + Milk_Yield + UniqueCow +
+                         Protein + Lactose + UniqueCow31, data = Data1)
+summary(Final15)
+plot(Final15)
+
+Resid15 <- residuals(Final15)
 
 ########################################################################
 ## Fit C18 with cow characteristics
@@ -65,5 +88,15 @@ M18_3 <- lm(C18_1 ~ Wt + BC_Score + Parity + Days + Intake + Milk_Yield +
               Fat + Protein + Lactose + Nitrogen, data = Data1)
 summary(M18_3)
 
+M18_4 <- lm(C18_1 ~ Wt + BC_Score + Parity + Days + Intake + Milk_Yield + UniqueCow + UniqueCow31 +
+              Fat + Protein + Lactose + Nitrogen, data = Data1)
+summary(M18_4)
+
 step(object = M18_3, direction = 'backward', k = log(nrow(Data1)))
 
+Final18 <- M15_5 <- lm(C15_0 ~ BC_Score + Parity + Days + Intake + Milk_Yield + UniqueCow +
+                         Nitrogen + Protein + Lactose + UniqueCow31, data = Data1)
+summary(Final18)
+plot(Final18)
+
+Resid18 <- residuals(Final18)
