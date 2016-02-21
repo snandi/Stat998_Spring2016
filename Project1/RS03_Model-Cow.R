@@ -100,3 +100,17 @@ summary(Final18)
 plot(Final18)
 
 Resid18 <- residuals(Final18)
+
+Data1$Resid18 <- Resid18
+Data1$Resid15 <- Resid15
+
+########################################################################
+## Save residuals to large dataset
+########################################################################
+Filename <- paste0(RScriptPath, 'Data.RData')
+load(Filename)
+Data$Resid18 <- Resid18
+Data$Resid15 <- Resid15
+save(Data, file = Filename)
+
+

@@ -13,6 +13,7 @@ library(reshape2)
 library(psych)
 
 source('~/RScripts/fn_Library_SN.R')
+source('~/Project_CurveReg/RScripts_CurveReg/fn_Library_CurveReg.R')
 ########################################################################
 ## Load header files and source functions
 ########################################################################
@@ -51,5 +52,40 @@ for(Col in Cols_Acid){
 }
 dev.off()
 
+########################################################################
+## Geom_smooth plot
+########################################################################
+Filename <- paste0(RScriptPath, 'Data.RData')
+load(Filename)
+Colnames_Wave <- colnames(Data)[grep(pattern = 'Wavelength', x = colnames(Data))]
+
+Means <- colMeans(Data[,Colnames_Wave])
+SDs <- colSD(Data[,Colnames_Wave])
+SEs <- colSE(Data[,Colnames_Wave])
+
+WaveLength <- as.numeric(gsub(pattern = 'Wavelength_', replacement = '', x = Colnames_Wave))
+
+Plot_SE <- qplot() + 
+  geom_smooth(aes(ymin = (Means - 2*SEs), ymax = (Means + 2*SEs), x = WaveLength, y = Means), 
+              col = 'gray40', fill = 'gray10',
+              stat = 'identity')
+
+Plot_SD <- qplot() + 
+  geom_smooth(aes(ymin = (Means - SDs), ymax = (Means + SDs), x = WaveLength, y = Means), 
+              col = 'black', fill = 'gray20',
+              stat = 'identity') +
+  ggtitle(label = 'Mean +/- standard deviation of MIR data') +
+  ylab(label = 'Mean +/- SD') +
+  theme_gray(base_size = 14)
 
 
+Data_Wave <- as.data.frame(cbind(WaveLength = WaveLength, t(Data[,Colnames_Wave])))
+colnames(Data_Wave) <- c('WaveLength', paste0('Cow', 1:59))
+colnames_Cow <- paste0('Cow', 1:59)
+
+Plot1 <- fn_plotMultCurves(
+  Data = Data_Wave, 
+  ColsToPlot = colnames_Cow,
+  XVar = WaveLength,
+  Xlab = 'Wavelength', Ylab = 'MIR'
+  )
