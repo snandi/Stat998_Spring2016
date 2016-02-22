@@ -9,6 +9,7 @@ library(xtable)
 library(survival)
 library(GGally)
 library(ggplot2)
+library(gridExtra)
 library(reshape2)
 library(pls)
 library(psych)
@@ -60,11 +61,12 @@ for(i in 1:length(Colnames_Wave)){
   rm(Model1, Model2, Model1a, Model2a)
 }
 
-qplot() + geom_histogram(aes(x = pValue18), data = Univariate)
-qplot() + geom_histogram(aes(x = pValue18_res), data = Univariate)
-qplot() + geom_histogram(aes(x = pValue15), data = Univariate)
-qplot() + geom_histogram(aes(x = pValue15_res), data = Univariate)
+P18 <- qplot() + geom_histogram(aes(x = pValue18), data = Univariate)
+P18_res <- qplot() + geom_histogram(aes(x = pValue18_res), data = Univariate)
+P15 <- qplot() + geom_histogram(aes(x = pValue15), data = Univariate)
+P15_res <- qplot() + geom_histogram(aes(x = pValue15_res), data = Univariate)
 
+grid.arrange(P18, P18_res, P15, P15_res, ncol = 2)
 #plot(x = rownames(Univariate), y = Univariate$pValue15, type = 'l')
 
 Univariate$colSDs <- colSD(Data = Data[,Colnames_Wave])

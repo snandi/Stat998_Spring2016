@@ -42,6 +42,10 @@ Cols_Acid <- c("C14_0", "C15_0", "C16_0",
 )
 table(Data1$Parity)
 
+qplot() + geom_boxplot(aes(x = factor(Parity), y = C15_0), data = Data1) +
+  geom_jitter()
+
+
 Filename <- paste0(RPlotPath, 'Pairwiseplots.pdf')
 pdf(file = Filename, onefile = T, pointsize = 6)
 ggpairs(Data1[,Cols_Cow])
