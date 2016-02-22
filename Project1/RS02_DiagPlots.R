@@ -83,9 +83,9 @@ Data_Wave <- as.data.frame(cbind(WaveLength = WaveLength, t(Data[,Colnames_Wave]
 colnames(Data_Wave) <- c('WaveLength', paste0('Cow', 1:59))
 colnames_Cow <- paste0('Cow', 1:59)
 
-Plot1 <- fn_plotMultCurves(
-  Data = Data_Wave, 
-  ColsToPlot = colnames_Cow,
-  XVar = WaveLength,
-  Xlab = 'Wavelength', Ylab = 'MIR'
-  )
+# Plot1 <- fn_plotMultCurves(
+#   Data = Data_Wave, 
+#   ColsToPlot = colnames_Cow,
+#   XVar = WaveLength,
+#   Xlab = 'Wavelength', Ylab = 'MIR'
+#   )

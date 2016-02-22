@@ -23,7 +23,7 @@ RPlotPath <- '~/Courses/Stat998_Spring2016/Project1/Plots/'
 Filename <- paste0(RScriptPath, 'Data.RData')
 load(Filename)
 head(colnames(Data), 30)
-
+tail(colnames(Data))
 ########################################################################
 ## Univariate Analysis
 ########################################################################
@@ -34,22 +34,36 @@ Colnames_Wave <- colnames(Data)[grep(pattern = 'Wavelength', x = colnames(Data))
 
 Univariate <- as.data.frame(cbind(WaveLengths = Colnames_Wave,
                                   pValue18 = rep(1, length(Colnames_Wave)),
-                                  pValue15 = rep(1, length(Colnames_Wave))
+                                  pValue18_res = rep(1, length(Colnames_Wave)),
+                                  pValue15 = rep(1, length(Colnames_Wave)),
+                                  pValue15_res = rep(1, length(Colnames_Wave))
 ))
+
 Univariate$pValue18 <- as.numeric(as.vector(Univariate$pValue18))
 Univariate$pValue15 <- as.numeric(as.vector(Univariate$pValue15))
+Univariate$pValue18_res <- as.numeric(as.vector(Univariate$pValue18_res))
+Univariate$pValue15_res <- as.numeric(as.vector(Univariate$pValue15_res))
 
 for(i in 1:length(Colnames_Wave)){
   Model1 <- lm(C18_1 ~ get(Colnames_Wave[i]), data = Data)
   Univariate[i,'pValue18'] <- fn_get_pValue(lmobject = Model1)
   
+  Model1a <- lm(Resid18 ~ get(Colnames_Wave[i]), data = Data)
+  Univariate[i,'pValue18_res'] <- fn_get_pValue(lmobject = Model1a)
+  
   Model2 <- lm(C15_0 ~ get(Colnames_Wave[i]), data = Data)
   Univariate[i,'pValue15'] <- fn_get_pValue(lmobject = Model2)
   
-  rm(Model1, Model2)
+  Model2a <- lm(Resid15 ~ get(Colnames_Wave[i]), data = Data)
+  Univariate[i,'pValue15_res'] <- fn_get_pValue(lmobject = Model2a)
+
+  rm(Model1, Model2, Model1a, Model2a)
 }
 
-#qplot() + geom_line(aes(y = pValue15, x = rownames(Univariate)), data = Univariate)
+qplot() + geom_histogram(aes(x = pValue18), data = Univariate)
+qplot() + geom_histogram(aes(x = pValue18_res), data = Univariate)
+qplot() + geom_histogram(aes(x = pValue15), data = Univariate)
+qplot() + geom_histogram(aes(x = pValue15_res), data = Univariate)
 
 #plot(x = rownames(Univariate), y = Univariate$pValue15, type = 'l')
 
