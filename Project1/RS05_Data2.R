@@ -8,8 +8,10 @@ rm(list = objects(all.names = TRUE))
 library(xtable)
 library(survival)
 library(ggplot2)
-library(reshape2)
 library(psych)
+library(reshape2)
+library(robustX)
+
 
 source('~/RScripts/fn_Library_SN.R')
 ########################################################################
@@ -22,3 +24,18 @@ Data2 <- read.csv(Filename, header = T)
 
 dim(Data2)
 
+head(Data2)
+Median <- L1median(Data2[,c('Days', 'Yield', 'Fat', 'Protein', 'Lactose')])$estimate
+
+Data2$Dist <- 0
+for(Row in 1:nrow(Data2)){
+  X <- Data2[Row, c('Days', 'Yield', 'Fat', 'Protein', 'Lactose')]
+  Y <- Median
+  Data2[Row, 'Dist'] <- dist(rbind(X, Y), method = 'euclidean')
+}
+
+Data2 <- Data2[order(Data2$Dist, decreasing = T), ]
+
+xtable(head(Data2))
+
+xtable(tail(Data2))
