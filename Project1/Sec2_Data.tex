@@ -1,0 +1,29 @@
+\section*{Data exploration} \label{Sec_Data}
+\subsection*{Missing value imputation}
+Before analyzing the data, the missing value for the variable ``Days\_In\_Milk'' was imputed by fitting a linear model between cow characteristics and ``Days\_In\_Milk''. The imputed value was $29.2126$. The details of this model fit is discussed in the Appendix. 
+
+\subsection*{Analyzing cow characteristics}
+Only one out of the 59 cows in the data-set have a ``parity'' of 4. This data point appears different from the rest of the sample. For example, in the plots between ``C15:0'' and ``parity'' a quadratic trend is evident, while between ``C18:1'' and ``parity'', a linearly decreasing trend is evident. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.43, page = 1]{Plots/CowPlots.pdf}
+\includegraphics[scale = 0.43, page = 2]{Plots/CowPlots.pdf}
+\end{center}
+\caption{Parity vs C15:0 and C18:1; \{parity = 4\} seems different from the rest }
+\label{fig:Fig1}
+\end{figure}
+
+Some of the cow characteristics are correlated to each other. For example, ``dry\_matter\_intake'' and ``parity'' have a correlation coefficient ($\rho$) of 0.631 (p-value $\sim \ 0$), for ``milk\_yield'' and ''dry\_matter\_intake'' $\rho = 0.529, (\text{ p-value } \sim \ 0$). The rest of the correlation coefficients are presented in table \ref{tab:corr_cow} in the Appendix. A similar pairwise correlation analysis was done between all the fatty acid concentrations, and none of them were statistically significant. The results are in table \ref{tab:corr_acid} in the Appendix. Hence, ``C15:0'' and ``C18:1'' could be analyzed independently, without having to consider confounding problems. 
+
+\subsection*{Exploring the MIR data}
+Although the MIR data provide the absorbance at 1060 wavelengths, around 10\% of them exhibit presence of peaks in the signals. The plot below (fig \ref{fig:mir}) displays the variability in the peaks of the MIR absorbance.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.55]{Plots/MIR_SDPlot.pdf}
+\end{center}
+\caption{Variability of the MIR absorbance data; shaded region: 1 Std Dev}
+\label{fig:mir}
+\end{figure}
+Clearly, absorption in wavelengths between 422 and 431, and between 815 and 882 show some variability in signal peaks. The rest of the wavelengths do not exhibit much features. 
+

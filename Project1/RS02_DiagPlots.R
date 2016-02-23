@@ -42,9 +42,41 @@ Cols_Acid <- c("C14_0", "C15_0", "C16_0",
 )
 table(Data1$Parity)
 
-qplot() + geom_boxplot(aes(x = factor(Parity), y = C15_0), data = Data1) +
-  geom_jitter()
+Corr.Cow <- corr.test(Data1[,Cols_Cow])
+View(round(Corr.Cow$r, 3))
+View(round(Corr.Cow$p, 3))
 
+xtable(round(Corr.Cow$r, 3))
+
+Corr.Acid <- corr.test(Data1[,Cols_Acid])
+View(round(Corr.Acid$r, 2))
+View(round(Corr.Acid$p, 2))
+
+xtable(round(Corr.Acid$r, 3))
+
+C15_parity <- qplot() + geom_boxplot(aes(x = factor(Parity), y = C15_0), data = Data1) +
+  geom_jitter(aes(x = factor(Parity), y = C15_0), data = Data1, size = 3, width = 0.2) +
+  ggtitle('C15:0 vs parity') + ylab(label = 'C15:0 concentration') + xlab(label = 'Parity') +
+  theme_gray(base_size = 14)
+
+C18_parity <- qplot() + geom_boxplot(aes(x = factor(Parity), y = C18_1), data = Data1) +
+  geom_jitter(aes(x = factor(Parity), y = C18_1), data = Data1, size = 3, width = 0.2) +
+  ggtitle('C18:1 vs parity') + ylab(label = 'C18:1 concentration') + xlab(label = 'Parity') +
+  theme_gray(base_size = 14)
+
+Filename <- paste0(RPlotPath, 'CowPlots.pdf')
+pdf(file = Filename, onefile = TRUE)
+C15_parity
+C18_parity
+dev.off()
+
+qplot() + 
+  geom_point(aes(x = Intake, y = C18_1, col = factor(Parity)), 
+             data = subset(Data1, Parity < 3), size = 5)
+
+qplot() + 
+  geom_point(aes(x = Days, y = C18_1, col = factor(Parity), shape = factor(Parity)), 
+             data = subset(Data1, Parity < 3), size = 5)
 
 Filename <- paste0(RPlotPath, 'Pairwiseplots.pdf')
 pdf(file = Filename, onefile = T, pointsize = 6)
@@ -81,6 +113,11 @@ Plot_SD <- qplot() +
   ggtitle(label = 'Mean +/- standard deviation of MIR data') +
   ylab(label = 'Mean +/- SD') +
   theme_gray(base_size = 14)
+
+Filename <- paste0(RPlotPath, 'MIR_SDPlot.pdf')
+pdf(file = Filename)
+Plot_SD
+dev.off()
 
 
 Data_Wave <- as.data.frame(cbind(WaveLength = WaveLength, t(Data[,Colnames_Wave])))

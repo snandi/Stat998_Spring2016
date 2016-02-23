@@ -27,3 +27,4 @@ Images/*
 Plots/
 Plots/*
 *.docx
+.nfs*
