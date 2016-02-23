@@ -90,26 +90,25 @@ Univariate$colSDs <- colSD(Data = Data[,Colnames_Wave])
 
 Univariate <- Univariate[order(Univariate$colSDs, decreasing = T),]
 
-Plot15 <- qplot() + geom_point(aes(y = pValue15, x = colSDs), data = Univariate) +
+Plot15 <- qplot() + geom_point(aes(y = pValue15_res, x = colSDs), data = Univariate) +
   ggtitle(label = 'Selection of Wavelengths for C15:0') +
   xlab(label = 'SD') + ylab(label = 'p-value of C15_0') +
-  annotate("rect", xmin = range(Univariate$pValue15_res)[1], 
-           xmax = range(Univariate$pValue15_res)[2], 
+  annotate("rect", xmin = 0, 
+           xmax = range(Univariate$colSDs)[2], 
            ymin = 0, ymax = 0.1, alpha = .2, fill = 'blue') +
   annotate("rect", xmin = quantile(Univariate$colSDs, probs = 0.90),
-           xmax = range(Univariate$pValue15_res)[2], 
+           xmax = range(Univariate$colSDs)[2], 
            ymin = 0, ymax = 1, alpha = .2, fill = 'blue')
 Plot15
 
 Plot18 <- qplot() + geom_point(aes(y = pValue18_res, x = colSDs), data = Univariate) +
   ggtitle(label = 'Selection of Wavelengths for C18:1') +
   xlab(label = 'Std Dev') + ylab(label = 'p-value of residual vs wavelength') +
-  geom_hline(yintercept = 0.15) +
-  annotate("rect", xmin = range(Univariate$pValue18_res)[1], 
-           xmax = range(Univariate$pValue18_res)[2], 
+  annotate("rect", xmin = 0, 
+           xmax = range(Univariate$colSDs)[2], 
            ymin = 0, ymax = 0.1, alpha = .2, fill = 'blue') +
   annotate("rect", xmin = quantile(Univariate$colSDs, probs = 0.90),
-           xmax = range(Univariate$pValue18_res)[2], 
+           xmax = range(Univariate$colSDs)[2], 
            ymin = 0, ymax = 1, alpha = .2, fill = 'blue')
 Plot18
 
@@ -152,13 +151,14 @@ PredictPlot15 <- qplot() +
   stat_smooth(aes(x = Test15$Resid15, y = Predict15[,,]), method = 'lm') +
   xlab(label = 'True value') + ylab('Predicted value') +
   theme_gray(base_size = 16)
+PredictPlot15
 
 ########################################################################
 ## pls for C18
 ########################################################################
 Colnames18 <- as.vector(Univariate$WaveLengths[Univariate$Select18 == T])
 Data18 <- Data[,c(Colnames18, 'Resid18')]
-Seed <- 11
+Seed <- 17
 set.seed(Seed)
 inTrain <- caret::createDataPartition(y = 1:nrow(Data18), p = 0.75, list = FALSE)
 Train18 <- Data18[ inTrain, ]
@@ -177,6 +177,7 @@ PredictPlot18 <- qplot() +
   stat_smooth(aes(x = Test18$Resid18, y = Predict18[,,]), method = 'lm') +
   xlab(label = 'True value') + ylab('Predicted value') +
   theme_gray(base_size = 16)
+PredictPlot18
 
 Filename <- paste0(RPlotPath, 'PredictionPlots.pdf')
 pdf(file = Filename, onefile = T)

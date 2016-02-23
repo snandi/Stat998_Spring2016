@@ -118,7 +118,9 @@ Data1$UniqueCow54 <- rownames(Data1) == "54"
 
 Final18 <- lm(C18_1 ~ Parity + Days + Intake + Milk_Yield + Nitrogen + UniqueCow54 + UniqueCow, data = Data1)
 summary(Final18)
+
 anova(M18_5, Final18)
+
 xtable(summary(Final18))
 Filename <- paste0(RPlotPath, 'ModelC18.pdf')
 pdf(file = Filename, onefile = T)
