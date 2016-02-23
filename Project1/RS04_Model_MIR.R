@@ -61,28 +61,67 @@ for(i in 1:length(Colnames_Wave)){
   rm(Model1, Model2, Model1a, Model2a)
 }
 
-P18 <- qplot() + geom_histogram(aes(x = pValue18), data = Univariate)
-P18_res <- qplot() + geom_histogram(aes(x = pValue18_res), data = Univariate)
-P15 <- qplot() + geom_histogram(aes(x = pValue15), data = Univariate)
-P15_res <- qplot() + geom_histogram(aes(x = pValue15_res), data = Univariate)
+P18 <- qplot() + geom_histogram(aes(x = pValue18), data = Univariate) +
+  xlab(label = 'p value') + ylab(label = 'frequency') + 
+  ggtitle(label = 'Univariate p-values of fitting C18:1 with MIR data')
 
-grid.arrange(P18, P18_res, P15, P15_res, ncol = 2)
-#plot(x = rownames(Univariate), y = Univariate$pValue15, type = 'l')
+P18_res <- qplot() + geom_histogram(aes(x = pValue18_res), data = Univariate) +
+  xlab(label = 'p value') + ylab(label = 'frequency') + 
+  ggtitle(label = 'Univariate p-values of fitting residuals of Model1 with MIR data')
+
+
+P15 <- qplot() + geom_histogram(aes(x = pValue15), data = Univariate) +
+xlab(label = 'p value') + ylab(label = 'frequency') + 
+  ggtitle(label = 'Univariate p-values of fitting C15:0 with MIR data')
+P15_res <- qplot() + geom_histogram(aes(x = pValue15_res), data = Univariate) +
+  xlab(label = 'p value') + ylab(label = 'frequency') + 
+  ggtitle(label = 'Univariate p-values of fitting residuals of Model2 with MIR data')
+
+Filename <- paste0(RPlotPath, 'pValue_MIR.pdf')
+pdf(file = Filename, onefile = T)
+plot(P18)
+plot(P18_res)
+plot(P15)
+plot(P15_res)
+dev.off()
+
 
 Univariate$colSDs <- colSD(Data = Data[,Colnames_Wave])
 
 Univariate <- Univariate[order(Univariate$colSDs, decreasing = T),]
 
 Plot15 <- qplot() + geom_point(aes(y = pValue15, x = colSDs), data = Univariate) +
-  ggtitle(label = 'pvalue15 with SD') +
-  xlab(label = 'SD') + ylab(label = 'p-value of C15_0')
+  ggtitle(label = 'Selection of Wavelengths for C15:0') +
+  xlab(label = 'SD') + ylab(label = 'p-value of C15_0') +
+  annotate("rect", xmin = range(Univariate$pValue15_res)[1], 
+           xmax = range(Univariate$pValue15_res)[2], 
+           ymin = 0, ymax = 0.1, alpha = .2, fill = 'blue') +
+  annotate("rect", xmin = quantile(Univariate$colSDs, probs = 0.90),
+           xmax = range(Univariate$pValue15_res)[2], 
+           ymin = 0, ymax = 1, alpha = .2, fill = 'blue')
+Plot15
 
-Plot18 <- qplot() + geom_point(aes(y = pValue18, x = colSDs), data = Univariate) +
-  ggtitle(label = 'pvalue18 with SD') +
-  xlab(label = 'SD') + ylab(label = 'p-value of C18_1')
+Plot18 <- qplot() + geom_point(aes(y = pValue18_res, x = colSDs), data = Univariate) +
+  ggtitle(label = 'Selection of Wavelengths for C18:1') +
+  xlab(label = 'Std Dev') + ylab(label = 'p-value of residual vs wavelength') +
+  geom_hline(yintercept = 0.15) +
+  annotate("rect", xmin = range(Univariate$pValue18_res)[1], 
+           xmax = range(Univariate$pValue18_res)[2], 
+           ymin = 0, ymax = 0.1, alpha = .2, fill = 'blue') +
+  annotate("rect", xmin = quantile(Univariate$colSDs, probs = 0.90),
+           xmax = range(Univariate$pValue18_res)[2], 
+           ymin = 0, ymax = 1, alpha = .2, fill = 'blue')
+Plot18
 
-Univariate$Select15 <- (Univariate$pValue15 < 0.1 | Univariate$colSDs > 0.15)
-Univariate$Select18 <- (Univariate$pValue18 < 0.25 | Univariate$colSDs > 0.15)
+Filename <- paste0(RPlotPath, 'pValueSD.pdf')
+pdf(file = Filename, onefile = T )
+plot(Plot18)
+plot(Plot15)
+dev.off()
+
+
+Univariate$Select15 <- (Univariate$pValue15 < 0.1 | Univariate$colSDs > quantile(Univariate$colSDs, probs = 0.90))
+Univariate$Select18 <- (Univariate$pValue18 < 0.1 | Univariate$colSDs > quantile(Univariate$colSDs, probs = 0.90))
 
 sum(Univariate$Select15)
 sum(Univariate$Select18)
@@ -92,31 +131,57 @@ Colnames15 <- as.vector(Univariate$WaveLengths[Univariate$Select15 == T])
 ########################################################################
 ## pls for C15
 ########################################################################
-Data15 <- Data[,c(Colnames15, 'C15_0')]
+Colnames15 <- as.vector(Univariate$WaveLengths[Univariate$Select15 == T])
+Data15 <- Data[,c(Colnames15, 'Resid15')]
+Seed <- 11
+set.seed(Seed)
+inTrain <- caret::createDataPartition(y = 1:nrow(Data15), p = 0.75, list = FALSE)
+Train15 <- Data15[ inTrain, ]
+Test15 <- Data15[ -inTrain, ]
 
-M15_1 <- plsr(C15_0 ~ ., ncomp = 50, data = Data15)
-plot(RMSEP(M15_1), legendpos = 'topright')
+M15_1 <- plsr(Resid15 ~ ., ncomp = 30, data = Train15)
+summary(M15_1)
 
-plot(M15_1, plottype = "scores", comps = 1:10)
+M15_2 <- plsr(Resid15 ~ ., ncomp = 12, data = Train15)
+summary(M15_2)
 
-explvar(object = M15_1)
-
+Predict15 <- predict(M15_2, ncomp = 12, newdata = Test15)
+PredictPlot15 <- qplot() + 
+  geom_point(aes(x = Test15$Resid15, y = Predict15[,,])) +
+  ggtitle(label = 'Prediction Plot after plsr, C15:0') +
+  stat_smooth(aes(x = Test15$Resid15, y = Predict15[,,]), method = 'lm') +
+  xlab(label = 'True value') + ylab('Predicted value') +
+  theme_gray(base_size = 16)
 
 ########################################################################
 ## pls for C18
 ########################################################################
 Colnames18 <- as.vector(Univariate$WaveLengths[Univariate$Select18 == T])
-Data18 <- Data[,c(Colnames18, 'C18_1')]
+Data18 <- Data[,c(Colnames18, 'Resid18')]
+Seed <- 11
+set.seed(Seed)
+inTrain <- caret::createDataPartition(y = 1:nrow(Data18), p = 0.75, list = FALSE)
+Train18 <- Data18[ inTrain, ]
+Test18 <- Data18[ -inTrain, ]
 
-M18_1 <- plsr(C18_1 ~ ., ncomp = 25, data = Data18)
-plot(RMSEP(M18_1), legendpos = 'topright')
+M18_1 <- plsr(Resid18 ~ ., ncomp = 25, data = Train18, validation = "LOO")
+summary(M18_1)
 
-explvar(object = M18_1)
+M18_2 <- plsr(Resid18 ~ ., ncomp = 12, data = Train18, validation = "LOO")
+summary(M18_2)
 
-qplot() + geom_histogram(aes(x = C18_1), data = Data18)
-qplot() + geom_histogram(aes(x = sqrt(C15_0)), data = Data15)
-qplot() + geom_boxplot(aes(x = factor(Parity), y = C15_0), data = Data) + coord_flip()
+Predict18 <- predict(M18_2, ncomp = 12, newdata = Test18)
+PredictPlot18 <- qplot() + 
+  geom_point(aes(x = Test18$Resid18, y = Predict18[,,])) +
+  ggtitle(label = 'Prediction Plot after plsr, C18:1') +
+  stat_smooth(aes(x = Test18$Resid18, y = Predict18[,,]), method = 'lm') +
+  xlab(label = 'True value') + ylab('Predicted value') +
+  theme_gray(base_size = 16)
 
-qplot() + geom_boxplot(aes(x = factor(Parity), y = C18_1), data = Data) +
-  geom_boxplot(aes(x = factor(Parity), y = C15_0), data = Data)
+Filename <- paste0(RPlotPath, 'PredictionPlots.pdf')
+pdf(file = Filename, onefile = T)
+PredictPlot18
+PredictPlot15
+dev.off()
+
 

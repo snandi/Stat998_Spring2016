@@ -1,3 +1,144 @@
 \section*{Statistical methodology and results} \label{Sec_Methods}
-We used the ``Partial least square (PLS) regression'' \cite{Mevik_Wehrens_2007_JSS} to reduce the number of covariates. 
+
+\subsection*{Analysis of C18:1}
+A multiple linear regression model was fit with the different cow and milk characteristics. Based on Bayesian Information Criterion (BIC) \cite{Schwarz_etal_1978_BIC}, ``dry matter intake'', ``milk yield'' and ``nitrogen'' were selected to best predict C18:1. However, given that some other cow characteristics like ``parity'' and ``days in milk'' were also important, they were included in the model in spite of not having statistical significance. In addition, cow id 7188 was flagged as an {\emph{influence}} point \cite{Chatterjee_Hadi_1986_SS} based on Cook's distance. So, a separate indicator variable was added for that cow. Another indicator variable was added to cow id 6153 since it was the only one with ``parity = 4''. Fig \ref{fig:Model18} below is the final residual plot of this model fit
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Mon Feb 22 20:43:42 2016
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & p value \\ 
+  \hline
+(Intercept) & 0.2618 & 0.0372 & 7.04 & 0.0000 \\ 
+  Parity & -0.0097 & 0.0060 & -1.61 & 0.1136 \\ 
+  Days & 0.0002 & 0.0002 & 1.13 & 0.2654 \\ 
+  Intake & -0.0022 & 0.0011 & -1.95 & 0.0568 \\ 
+  Milk\_Yield & 0.0008 & 0.0002 & 3.50 & 0.0010 \\ 
+  Nitrogen & -0.0016 & 0.0013 & -1.26 & 0.2126 \\ 
+  Cow7188 & 0.0653 & 0.0241 & 2.71 & 0.0091 \\ 
+  Cow6153 & 0.0103 & 0.0266 & 0.39 & 0.7011 \\ 
+   \hline
+\end{tabular}
+\caption{Model-1 for C18:1, $R^2 = 0.39, \text{ p-value= } 0.0004$}
+\label{Tab:Model18}
+\end{table}
+Table \ref{Tab:Model18} lists the model fit. 
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.3, page = 1]{Plots/ModelC18.pdf}
+\includegraphics[scale = 0.3, page = 2]{Plots/ModelC18.pdf}
+\includegraphics[scale = 0.3, page = 3]{Plots/ModelC18.pdf}
+\end{center}
+\caption{Residual plot for model fit of C18:1}
+\label{fig:Model18}
+\end{figure}
+
+The residuals of this model were then used to fit ``Partial least square (PLS)''  \cite{Mevik_Wehrens_2007_JSS} model with the wavelength absorption data from MIR. Similar to principal component regression (PCR), PLS is also a powerful technique to reduce the number of dimensions. In a multiple linear regression context $Y = X\beta + \epsilon$, where $Y:$ response and $X:$ covariates, PLS chooses scores and loadings in such a way to describe as much as possible of the covariance between $X$ and $Y$ , where PCR concentrates on the variance of $X$. It can also be shown that PLS behave as good shrinkage methods (\cite{Hastie_etal_2009_Elements}). Fig \ref{fig:pvalue18} is a comparison of distributions of univariate pvalues of 1060 wavelengths with C18:0 and with residuals of Model-1. 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.43, page = 1]{Plots/pValue_MIR.pdf}
+\includegraphics[scale = 0.43, page = 2]{Plots/pValue_MIR.pdf}
+\end{center}
+\caption{Distribution of pvalues of 1060 wavelength absorptions}
+\label{fig:pvalue18}
+\end{figure}
+It is clear that the wavelength absorption data is much more associated (lower pvalue $\implies$ stronger association) with the residuals of Model-1, than with C18:1 directly. Next, the top 10\% most variable of the wavelengths are chosen, along with the wavelengths with pvalue $< 0.1$. Fig \ref{fig:pvalSD18} is a plot of p values with standard deviations of all 1060 wavelengths. The inclusion regions are shaded in blue. Total 107 wavelengths were selected.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.45, page = 1]{Plots/pValueSD.pdf}
+\end{center}
+\caption{Inclusion criteria of wavelengths for C18:1}
+\label{fig:pvalSD18}
+\end{figure}
+Next, a PLS regression was fit to choose the best latent factors out of these wavelengths that best fit the residuals from Model-1. Randomly 75\% of the data was taken for training the PLS model and the fit was used, to compare the predictions of the rest of the dataset. It turned out that 12 factors were enough to explain 80\% variability of both $X$ and $Y$ of the model, by using leave-one-out cross validation. Table \ref{Tab:plsr18} lists the \% variance explained by the number of latent factors.
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+      & 9 comps & 10 comps & 11 comps & 12 comps & 13 comps & 14 comps \\
+  \hline
+  X   & 72.39   &  75.54   &  77.57   & 80.21    & 83.37    & 84.94 \\
+Resid & 82.26   &  84.05   &  86.76   & 88.34    & 89.29    & 91.01 \\
+  \hline
+\end{tabular}
+\caption{TRAINING: \% variance explained}
+\label{Tab:plsr18}
+\end{table}
+After fitting the model with 12 factors, below is a plot comparing the predictions with the true Residuals of the test dataset.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.45, page = 1]{Plots/PredictionPlots.pdf}
+\end{center}
+\caption{Prediction comparison for C18:1}
+\label{fig:plsr18}
+\end{figure}
+
+\subsection*{Analysis of C15:0}
+A similar hierarchical approach was followed for C15:0 as well. Three cows, with ids 6885, 7193 and 7201 turned out to be influence points. Below is the multiple linear regression model fit
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Tue Feb 23 00:09:15 2016
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & Estimate & Std. Error & t value & p-value \\ 
+  \hline
+  (Intercept) & 0.0047 & 0.0055 & 0.85 & 0.3970 \\ 
+  Parity & 0.0001 & 0.0003 & 0.53 & 0.5991 \\ 
+  Days & -0.0000 & 0.0000 & -0.53 & 0.5972 \\ 
+  Milk\_Yield & 0.0000 & 0.0000 & 2.22 & 0.0307 \\ 
+  Cow6153 & 0.0006 & 0.0013 & 0.48 & 0.6351 \\ 
+  Protein & 0.0020 & 0.0006 & 3.15 & 0.0028 \\ 
+  Lactose & -0.0008 & 0.0009 & -0.89 & 0.3776 \\ 
+  Cow6885 & 0.0056 & 0.0012 & 4.68 & 0.0000 \\ 
+  Cow7193 & 0.0005 & 0.0010 & 0.51 & 0.6155 \\ 
+  Cow9201 & 0.0034 & 0.0011 & 3.12 & 0.0030 \\ 
+  \hline
+\end{tabular}
+\caption{Model-2 for C15:0, $R^2 = 0.55, \text{ p-value= } 0.0000$}
+\label{Tab:Model15}
+\end{table}
+Fig \ref{fig:Model15} shows the residual plots of Model-2.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.3, page = 1]{Plots/ModelC15.pdf}
+\includegraphics[scale = 0.3, page = 2]{Plots/ModelC15.pdf}
+\includegraphics[scale = 0.3, page = 3]{Plots/ModelC15.pdf}
+\end{center}
+\caption{Residual plot for model fit of C15:0}
+\label{fig:Model15}
+\end{figure}
+The residuals of Model-2 were used to fit the 1060 wavelengths, and the wavelengths with pvalue $< 0.1$ ``or'' the top 10\% most variable of the wavelengths are chosen. Fig \ref{fig:pvalSD15} plot with this selection regions highlighted in blue. 354 wavelengths were chosen. 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.45, page = 2]{Plots/pValueSD.pdf}
+\end{center}
+\caption{Inclusion criteria of wavelengths for C15:0}
+\label{fig:pvalSD15}
+\end{figure}
+Next, a PLS regression was fit to choose the best latent factors out of these wavelengths that best fit the residuals from Model-2. Randomly 75\% of the data was taken for training the PLS model and the fit was used, to compare the predictions of the rest of the dataset. 12 factors were enough to explain 80\% variability of both $X$ and $Y$ of the model, by using leave-one-out cross validation. Table \ref{Tab:plsr15} lists the \% variance explained by the number of latent factors.
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+      & 9 comps & 10 comps & 11 comps & 12 comps & 13 comps & 14 comps \\
+  \hline
+  X   & 72.83   &  76.03   &  78.28   & 80.56    & 83.49    & 84.88 \\
+Resid & 80.69   &  83.24   &  86.39   & 88.71    & 90.00    & 92.11 \\
+  \hline
+\end{tabular}
+\caption{TRAINING: \% variance explained, for C15:0}
+\label{Tab:plsr15}
+\end{table}
+
+After fitting the model with 12 factors, below is a plot comparing the predictions with the true Residuals of the test dataset.
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale = 0.45, page = 2]{Plots/PredictionPlots.pdf}
+\end{center}
+\caption{Prediction comparison for C15:0}
+\label{fig:plsr15}
+\end{figure}
 
