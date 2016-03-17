@@ -21,7 +21,14 @@ Filename <- paste0(RScriptPath, 'Data_Combined.txt')
 Data <- read.table(file = Filename, header = T, sep = '\t')
 
 dim(Data)
-## 59 observations 1083 covariates
-head(names(Data), 30)
+str(Data)
 
 str(Data)
+
+qplot() + geom_point(aes(x = Ht, y = Yield_tonperac), data = Data)
+
+qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type), data = Data) +
+  facet_wrap(~ Veg_Type)
+
+qplot() + geom_point(aes(y = Yield_tonperac, x = Sorghum_Type, col = as.factor(Year)), data = Data) +
+  facet_wrap(~ Veg_Type)
