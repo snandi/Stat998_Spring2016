@@ -20,15 +20,19 @@ RScriptPath <- '~/Courses/Stat998_Spring2016/Project2/'
 Filename <- paste0(RScriptPath, 'Data_Combined.txt')
 Data <- read.table(file = Filename, header = T, sep = '\t')
 
+Data$Year <- as.factor(Data$Year)
+
 dim(Data)
 str(Data)
 
-str(Data)
+Filename <- paste0(RScriptPath, 'Data_Combined.RData')
+save(Data, file = Filename)
 
 qplot() + geom_point(aes(x = Ht, y = Yield_tonperac), data = Data)
 
 qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type), data = Data) +
   facet_wrap(~ Veg_Type)
 
-qplot() + geom_point(aes(y = Yield_tonperac, x = Sorghum_Type, col = as.factor(Year)), data = Data) +
-  facet_wrap(~ Veg_Type)
+qplot() + geom_point(aes(y = Yield_tonperac, x = Sorghum_Type, col = Year), data = Data) +
+  facet_wrap(~ Veg_Type) + geom_jitter(aes(y = Yield_tonperac, x = Sorghum_Type, col = Year), data = Data)
+
