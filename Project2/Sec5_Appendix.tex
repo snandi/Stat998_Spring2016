@@ -1,0 +1,72 @@
+\section*{Appendix} \label{Appendix}
+\subsection*{Data imputation}
+\noindent
+To impute the missing value for ``Days\_In\_Milk'', the following linear model was fit:
+\[ \text{Dry\_Matter\_Intake} = \beta_0 + \beta_1 \text{BodyWeight} + \beta_2 \text{Body\_Condition\_Score} + \beta_3 \text{Parity} + \beta_4 \text{Milk\_Yield}  \]
+Below are the coefficients. The overall $R^2 = 0.49$. The imputed value for Dry\_Matter\_Intake was $29.2126$. 
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Mon Feb 15 23:08:50 2016
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+  & Estimate & Std. Error & t value & p-value \\ 
+  \hline
+ (Intercept) & 16.3233 & 5.1179 & 3.19 & 0.0024 \\ 
+  BodyWeight & 0.0063 & 0.0034 & 1.84 & 0.0710 \\ 
+  Body\_Condition\_Score & -2.6687 & 1.2763 & -2.09 & 0.0413 \\ 
+  Parity & 1.5763 & 0.6980 & 2.26 & 0.0281 \\ 
+  Milk\_Yield & 0.0519 & 0.0260 & 2.00 & 0.0511 \\ 
+  \hline
+\end{tabular}
+\caption{Model fit between Dry\_Matter\_Intake and other cow characteristics}
+\end{table}
+
+\subsection*{Pairwise Correlation between cow and milk characteristics}
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Mon Feb 22 14:40:11 2016
+\begin{table}[H]
+%\centering
+\begin{tabular}{rllllllllll}
+ \hline
+ 		& Wt 		& BC score 	& Parity 	& Days 		& Intake 	& Milk yd 	& Fat 		& Protein 	& Lactose 	& Nitrogen \\ 
+ \hline
+  Wt 		& 1.00 		& 0.30 		& 0.40 		& 0.17 		& 0.33 		& 0.22 		& -0.04 	& 0.08 		& -0.21 	& 0.00 \\ 
+  BC score 	& 0.30$^{*}$ 	& 1.00 		& -0.38 	& 0.20 		& -0.39 	& -0.30 	& 0.04 		& 0.01 		& 0.24 		& -0.37 \\ 
+  Parity 	& 0.40$^{**}$ 	& -0.38$^{**}$ 	& 1.00 		& -0.02 	& 0.63$^{**}$ 	& 0.52$^{**}$ 	& -0.09 	& 0.15 		& -0.46$^{*}$ 	& 0.18 \\ 
+  Days 		& 0.17 		& 0.20 		& -0.02 	& 1.00 		& -0.04 	& -0.28 	& 0.09 		& 0.23 		& 0.06 		& -0.01 \\ 
+  Intake 	& 0.33$^{**}$ 	& -0.39$^{**}$ 	& 0.63$^{**}$ 	& -0.04 	& 1.00 		& 0.53$^{**}$ 	& -0.03 	& 0.06 		& -0.25 	& 0.26 \\ 
+  Milk yield 	& 0.22 		& -0.30$^{*}$ 	& 0.52$^{**}$ 	& -0.28$^{*}$ 	& 0.53$^{**}$ 	& 1.00 		& -0.24 	& -0.31 	& -0.39 	& 0.04 \\ 
+  Fat 		& -0.04 	& 0.04 		& -0.09 	& 0.09 		& -0.03 	& -0.24 	& 1.00 		& 0.49$^{**}$ 	& 0.23 		& 0.08 \\ 
+  Protein 	& 0.08 		& 0.01 		& 0.15 		& 0.23 		& 0.06 		& -0.31$^{*}$ 	& 0.49$^{**}$ 	& 1.00 		& 0.14 		& 0.10 \\ 
+  Lactose 	& -0.21 	& 0.24 		& -0.46$^{*}$ 	& 0.06 		& -0.25 	& -0.39$^{**}$ 	& 0.23 		& 0.14 		& 1.00 		& 0.01 \\ 
+  Nitrogen 	& 0.00 		& -0.37$^{**}$ 	& 0.18 		& -0.01 	& 0.26 		& 0.04 		& 0.08 		& 0.10 		& 0.01 		& 1.00 \\ 
+  \hline
+\end{tabular}
+{\footnotesize $(*): $ p-value $< 0.05$, $(**): $ p-value $< 0.01$}
+\caption{Pairwise Correlation between cow and milk characteristics}
+\label{tab:corr_cow}
+\end{table}
+
+\subsection*{Pairwise Correlation between fatty acids}
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Mon Feb 22 15:33:20 2016
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrrrr}
+  \hline
+ & C14:0 & C15:0 & C16:0 & C17:0 & C18:0 & C18:1 \\ 
+  \hline
+  C14:0 & 1.00 & 0.18 & 0.10 & -0.51 & -0.13 & -0.62 \\ 
+  C15:0 & 0.18 & 1.00 & 0.22 & 0.07 & -0.43 & -0.22 \\ 
+  C16:0 & 0.10 & 0.22 & 1.00 & -0.16 & -0.21 & -0.69 \\ 
+  C17:0 & -0.51 & 0.07 & -0.16 & 1.00 & 0.26 & 0.36 \\ 
+  C18:0 & -0.13 & -0.43 & -0.21 & 0.26 & 1.00 & -0.14 \\ 
+  C18:1 & -0.62 & -0.22 & -0.69 & 0.36 & -0.14 & 1.00 \\ 
+  \hline
+\end{tabular}
+\caption{Pairwise Correlation between fatty acids}
+\label{tab:corr_acid}
+\end{table}
+
+

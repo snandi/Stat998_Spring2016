@@ -10,6 +10,7 @@ library(survival)
 library(ggplot2)
 library(reshape2)
 library(psych)
+library(lme4)
 
 source('~/RScripts/fn_Library_SN.R')
 ########################################################################
@@ -46,4 +47,19 @@ Model2 <- lm(Yield_tonperac ~ Location + Year + Veg_Type + Sorghum_SubType +
 summary(Model2)
 anova(Model2)
 
+########################################################################
+## Model 3: Yield ~ 
+########################################################################
+Model3 <- lmer(Yield_tonperac ~ 1 + Veg_Type + Sorghum_Type*Sorghum_SubType + (1|Location) + (1|Year), 
+               data = Data)
+summary(Model3)
+anova(Model3)
 
+########################################################################
+## Model 4: Yield ~ 
+########################################################################
+Model4 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|LocYear), 
+               data = Data)
+summary(Model4)
+anova(Model4)
+qplot() + geom_point(aes(y = residuals(Model4), x = fitted.values(Model4)))
