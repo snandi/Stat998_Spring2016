@@ -34,17 +34,18 @@ Corr.Test <- corr.test(Data[,Responses])
 round(Corr.Test$r, 4)
 round(Corr.Test$p, 4)
 
+Data$IVTD_Yield <- Data$Yield_tonperac * Data$IVTD
 ########################################################################
 ## Model 1: Yield ~ Location + Year + Sorghum_Type + Veg_Type
 ########################################################################
-Model1 <- lm(Yield_tonperac ~ Location + Year + Sorghum_Type + Veg_Type, data = Data)
+Model1 <- lm(IVTD_Yield ~ Location + Year + Sorghum_Type + Veg_Type, data = Data)
 summary(Model1)
 anova(Model1)
 
 ########################################################################
 ## Model 2: Yield ~ Location + Year + Sorghum_Type + Veg_Type
 ########################################################################
-Model2 <- lm(Yield_tonperac ~ Location + Year + Veg_Type + Sorghum_SubType +
+Model2 <- lm(IVTD_Yield ~ Location + Year + Veg_Type + Sorghum_SubType +
                Location*Veg_Type, data = Data)
 summary(Model2)
 anova(Model2)
@@ -52,7 +53,7 @@ anova(Model2)
 ########################################################################
 ## Model 3: Yield ~ 
 ########################################################################
-Model3 <- lmer(Yield_tonperac ~ 1 + Veg_Type + Sorghum_Type*Sorghum_SubType + (1|Location) + (1|Year), 
+Model3 <- lmer(IVTD_Yield ~ 1 + Veg_Type + Sorghum_Type*Sorghum_SubType + (1|Location) + (1|Year), 
                data = Data)
 summary(Model3)
 anova(Model3)
@@ -61,7 +62,7 @@ qplot() + geom_point(aes(y = residuals(Model3), x = fitted.values(Model3)))
 ########################################################################
 ## Model 4: Yield ~ 
 ########################################################################
-Model4 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|LocYear), 
+Model4 <- lmer(sqrt(IVTD_Yield) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|LocYear), 
                data = Data)
 summary(Model4)
 anova(Model4)
@@ -70,7 +71,7 @@ qplot() + geom_point(aes(y = residuals(Model3), x = fitted.values(Model3)))
 ########################################################################
 ## Model 5: adding random effect of replication
 ########################################################################
-Model5 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Location) +
+Model5 <- lmer(sqrt(IVTD_Yield) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Location) +
                  (1|Year/Rep), 
                data = Data)
 summary(Model5)
@@ -80,7 +81,7 @@ anova(Model5)
 ########################################################################
 ## Model 5: adding random slope for year
 ########################################################################
-Model6 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Location) + 
+Model6 <- lmer(sqrt(IVTD_Yield) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Location) + 
                  (1|Year/Rep), 
                data = Data)
 summary(Model6)
@@ -89,14 +90,14 @@ AIC(Model6)
 ########################################################################
 ## Model 6: 2014
 ########################################################################
-Model6_2014 <- lmer(Yield_tonperac ~ 1 + Veg_Type + Sorghum_SubType + (1|Location) + 
+Model6_2014 <- lmer(IVTD_Yield ~ 1 + Veg_Type + Sorghum_SubType + (1|Location) + 
                       (1|Location:Rep), 
                     data = subset(Data, Year == '2014')
 )
 summary(Model6_2014)
 qplot() + geom_point(aes(y = residuals(Model6_2014), x = fitted.values(Model6_2014)))
 
-Model6_2015 <- lmer(Yield_tonperac ~ 1 + Veg_Type + Sorghum_SubType + (1|Location) + 
+Model6_2015 <- lmer(IVTD_Yield ~ 1 + Veg_Type + Sorghum_SubType + (1|Location) + 
                       (1|Location:Rep), 
                     data = subset(Data, Year == '2015')
 )
@@ -106,10 +107,10 @@ qplot() + geom_point(aes(y = residuals(Model6_2015), x = fitted.values(Model6_20
 ########################################################################
 ## Model 7: adding 
 ########################################################################
-Model7 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + Ht + StemCount + 
+Model7 <- lmer(sqrt(IVTD_Yield) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + Ht + StemCount + 
                  (1|Location) + (1|Year/Rep), 
                data = Data)
 summary(Model7)
 AIC(Model7)
 
-summary(lm(sqrt(Yield_tonperac) ~ 1 + Ht + StemCount, data = Data))
+summary(lm(sqrt(IVTD_Yield) ~ 1 + Ht + StemCount, data = Data))

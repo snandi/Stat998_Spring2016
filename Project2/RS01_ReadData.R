@@ -17,7 +17,7 @@ source('~/RScripts/fn_Library_SN.R')
 ########################################################################
 RScriptPath <- '~/Courses/Stat998_Spring2016/Project2/'
 
-Filename <- paste0(RScriptPath, 'Data_Combined.txt')
+Filename <- paste0(RScriptPath, 'Data_Combined_2.txt')
 Data <- read.table(file = Filename, header = T, sep = '\t')
 
 Data$Year <- as.factor(Data$Year)
@@ -26,22 +26,84 @@ Data$LocYear <- with(Data, interaction(Location,  Year))
 dim(Data)
 str(Data)
 
-Filename <- paste0(RScriptPath, 'Data_Combined.RData')
+Filename <- paste0(RScriptPath, 'Data_Combined_2.RData')
 save(Data, file = Filename)
 
 qplot() + geom_point(aes(x = Ht, y = Yield_tonperac), data = Data)
 
-qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type), data = Data) +
-  facet_wrap(~ Veg_Type)
+Plot0 <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Sorghum_Type), data = Data) +
+  facet_wrap(~ Veg_Type) + ylab(label = 'Total yield (ton per acre)') + xlab(label = 'Sorghum type') +
+  theme(legend.position = 'top', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+  )
 
-qplot() + geom_point(aes(y = Yield_tonperac, x = Sorghum_Type, col = Year), data = Data) +
-  facet_wrap(~ Veg_Type) + geom_jitter(aes(y = Yield_tonperac, x = Sorghum_Type, col = Year), data = Data)
+Plot1a <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Year), data = Data) +
+  facet_wrap(~ Veg_Type) + ylab(label = 'Total yield (ton per acre)') + xlab(label = 'Sorghum type') +
+  theme(legend.position = 'top', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+  )
+Filename <- paste0(RScriptPath, 'Plot1a.pdf') 
+ggsave(filename = Filename, plot = Plot1a, device = 'pdf', width = 6, height = 4, units = 'in')
 
-qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Year), data = Data) +
-  facet_wrap(~ Veg_Type)
+Plot1b <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Sorghum_SubType), data = Data) +
+  facet_wrap(~ Year) + ylab(label = 'Total yield (ton per acre)') + xlab(label = 'Sorghum type') +
+  theme(legend.position = 'top', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+  )
+Filename <- paste0(RScriptPath, 'Plot1b.pdf') 
+ggsave(filename = Filename, plot = Plot1b, device = 'pdf', width = 6, height = 4, units = 'in')
 
-qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, col = Location), data = Data) +
+Plot2 <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_SubType, fill = Sorghum_SubType), data = Data) +
+  facet_wrap(Veg_Type ~ Year) + #coord_flip() +
+  ylab(label = 'Total yield (ton per acre)') + xlab(label = 'Sorghum sub-type') +
+#  theme(legend.position = 'top')
+        theme(legend.position = '', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+        )
+Filename <- paste0(RScriptPath, 'Plot2.pdf') 
+ggsave(filename = Filename, plot = Plot2, device = 'pdf', width = 6, height = 4, units = 'in')
+
+qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Location), data = Data) +
   facet_wrap(~ Veg_Type)
 
 qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = LocYear), data = Data) +
   facet_wrap(~ Veg_Type) 
+
+###################################################################################
+## NDFD
+###################################################################################
+Plot1a_ndfd <- qplot() + geom_boxplot(aes(y = NDFD, x = Sorghum_Type, fill = Year), data = Data) +
+  facet_wrap(~ Veg_Type) + ylab(label = 'NDFD') + xlab(label = 'Sorghum type') +
+  theme(legend.position = 'top', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+  )
+
+Plot1b_ndfd <- qplot() + geom_boxplot(aes(y = NDFD, x = Sorghum_Type, fill = Sorghum_SubType), data = Data) +
+  facet_wrap(~ Year) + ylab(label = 'NDFD') + xlab(label = 'Sorghum type') +
+  theme(legend.position = 'top', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+  )

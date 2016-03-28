@@ -34,6 +34,10 @@ Corr.Test <- corr.test(Data[,Responses])
 round(Corr.Test$r, 4)
 round(Corr.Test$p, 4)
 
+stargazer(Corr.Test$r, 4)
+xtable(round(Corr.Test$r, 4), digits = c(0, 4, 4, 4, 4, 4, 4, 4))
+
+
 ########################################################################
 ## Model 1: Yield ~ Location + Year + Sorghum_Type + Veg_Type
 ########################################################################
@@ -80,11 +84,17 @@ anova(Model5)
 ########################################################################
 ## Model 5: adding random slope for year
 ########################################################################
-Model6 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Location) + 
+Model6 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + 
                  (1|Year/Rep), 
                data = Data)
 summary(Model6)
 AIC(Model6)
+
+Model6a <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type +                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              Sorghum_Type + Sorghum_SubType + (1|Year) +
+                 (1|Year:Rep), 
+               data = Data)
+summary(Model6a)
+AIC(Model6a)
 
 ########################################################################
 ## Model 6: 2014
@@ -113,3 +123,4 @@ summary(Model7)
 AIC(Model7)
 
 summary(lm(sqrt(Yield_tonperac) ~ 1 + Ht + StemCount, data = Data))
+
