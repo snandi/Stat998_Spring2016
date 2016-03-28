@@ -37,7 +37,7 @@ qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type), data = Data) +
 qplot() + geom_point(aes(y = Yield_tonperac, x = Sorghum_Type, col = Year), data = Data) +
   facet_wrap(~ Veg_Type) + geom_jitter(aes(y = Yield_tonperac, x = Sorghum_Type, col = Year), data = Data)
 
-qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, col = Year), data = Data) +
+qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Year), data = Data) +
   facet_wrap(~ Veg_Type)
 
 qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, col = Location), data = Data) +
