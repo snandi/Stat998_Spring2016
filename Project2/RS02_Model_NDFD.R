@@ -20,96 +20,44 @@ source('~/RScripts/fn_Library_SN.R')
 ########################################################################
 RScriptPath <- '~/Courses/Stat998_Spring2016/Project2/'
 
-Filename <- paste0(RScriptPath, 'Data_Combined.RData')
+Filename <- paste0(RScriptPath, 'Data_Combined_2.RData')
 load(Filename)
 
 dim(Data)
 str(Data)
 
 ########################################################################
-## Correlation between different response variables
+## Model 2: Yield ~ 
 ########################################################################
-Responses <- c('Yield_tonperac', 'Ht', 'StemCount', 'CP', 'NDF', 'IVTD', 'NDFD')
-Corr.Test <- corr.test(Data[,Responses])
-round(Corr.Test$r, 4)
-round(Corr.Test$p, 4)
-
-########################################################################
-## Model 1: Yield ~ Location + Year + Sorghum_Type + Veg_Type
-########################################################################
-Model1 <- lm(NDFD ~ Location + Year + Sorghum_Type + Veg_Type, data = Data)
-summary(Model1)
-anova(Model1)
-
-########################################################################
-## Model 2: Yield ~ Location + Year + Sorghum_Type + Veg_Type
-########################################################################
-Model2 <- lm(NDFD ~ Location + Year + Veg_Type + Sorghum_SubType +
-               Location*Veg_Type, data = Data)
+Model2 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Year), 
+               data = Data)
 summary(Model2)
-anova(Model2)
 
 ########################################################################
 ## Model 3: Yield ~ 
 ########################################################################
-Model3 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_Type*Sorghum_SubType + (1|Location) + (1|Year), 
+Model3 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Year) + (1|Location), 
                data = Data)
 summary(Model3)
-anova(Model3)
+anova(Model2, Model3)
 qplot() + geom_point(aes(y = residuals(Model3), x = fitted.values(Model3)))
 
 ########################################################################
 ## Model 4: Yield ~ 
 ########################################################################
-Model4 <- lmer(sqrt(NDFD) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|LocYear), 
+Model4 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Year/Rep) + (1|Location), 
                data = Data)
 summary(Model4)
-anova(Model4)
-qplot() + geom_point(aes(y = residuals(Model3), x = fitted.values(Model3)))
+anova(Model3, Model4)
+qplot() + geom_point(aes(y = residuals(Model4), x = fitted.values(Model4)))
 
 ########################################################################
-## Model 5: adding random effect of replication
+## Model 5: Yield ~ 
 ########################################################################
-Model5 <- lmer(sqrt(NDFD) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Location) +
-                 (1|Year/Rep), 
+Model5 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Year/Rep) + (1 + Veg_Type|Location), 
                data = Data)
 summary(Model5)
-AIC(Model5)
-anova(Model5)
+anova(Model4, Model5)
+qplot() + geom_point(aes(y = residuals(Model5), x = fitted.values(Model5)))
 
-########################################################################
-## Model 5: adding random slope for year
-########################################################################
-Model6 <- lmer(sqrt(NDFD) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Location) + 
-                 (1|Year/Rep), 
-               data = Data)
-summary(Model6)
-AIC(Model6)
 
-########################################################################
-## Model 6: 2014
-########################################################################
-Model6_2014 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Location) + 
-                      (1|Location:Rep), 
-                    data = subset(Data, Year == '2014')
-)
-summary(Model6_2014)
-qplot() + geom_point(aes(y = residuals(Model6_2014), x = fitted.values(Model6_2014)))
-
-Model6_2015 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Location) + 
-                      (1|Location:Rep), 
-                    data = subset(Data, Year == '2015')
-)
-summary(Model6_2015)
-qplot() + geom_point(aes(y = residuals(Model6_2015), x = fitted.values(Model6_2015)))
-
-########################################################################
-## Model 7: adding 
-########################################################################
-Model7 <- lmer(sqrt(NDFD) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + Ht + StemCount + 
-                 (1|Location) + (1|Year/Rep), 
-               data = Data)
-summary(Model7)
-AIC(Model7)
-
-summary(lm(sqrt(NDFD) ~ 1 + Ht + StemCount, data = Data))

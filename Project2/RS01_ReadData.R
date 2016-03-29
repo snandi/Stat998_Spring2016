@@ -40,6 +40,8 @@ Plot0 <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill =
         axis.title.x = element_text(size = 9),
         axis.title.y = element_text(size = 9)
   )
+Filename <- paste0(RScriptPath, 'Plot0.pdf') 
+ggsave(filename = Filename, plot = Plot0, device = 'pdf', width = 6, height = 4, units = 'in')
 
 Plot1a <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Year), data = Data) +
   facet_wrap(~ Veg_Type) + ylab(label = 'Total yield (ton per acre)') + xlab(label = 'Sorghum type') +
@@ -65,8 +67,20 @@ Plot1b <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill 
 Filename <- paste0(RScriptPath, 'Plot1b.pdf') 
 ggsave(filename = Filename, plot = Plot1b, device = 'pdf', width = 6, height = 4, units = 'in')
 
+Plot1c <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Year), data = Data) +
+  facet_wrap(~ Location) + ylab(label = 'Total yield (ton per acre)') + xlab(label = 'Sorghum type') +
+  theme(legend.position = 'top', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+  )
+Filename <- paste0(RScriptPath, 'Plot1c.pdf') 
+ggsave(filename = Filename, plot = Plot1c, device = 'pdf', width = 6, height = 4, units = 'in')
+
 Plot2 <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_SubType, fill = Sorghum_SubType), data = Data) +
-  facet_wrap(Veg_Type ~ Year) + #coord_flip() +
+  facet_wrap( Location ~ Veg_Type) + #coord_flip() +
   ylab(label = 'Total yield (ton per acre)') + xlab(label = 'Sorghum sub-type') +
 #  theme(legend.position = 'top')
         theme(legend.position = '', 
@@ -77,7 +91,7 @@ Plot2 <- qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_SubType, fil
         axis.title.y = element_text(size = 9)
         )
 Filename <- paste0(RScriptPath, 'Plot2.pdf') 
-ggsave(filename = Filename, plot = Plot2, device = 'pdf', width = 6, height = 4, units = 'in')
+ggsave(filename = Filename, plot = Plot2, device = 'pdf', width = 6, height = 6, units = 'in')
 
 qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Location), data = Data) +
   facet_wrap(~ Veg_Type)

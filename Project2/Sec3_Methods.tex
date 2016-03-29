@@ -1,3 +1,127 @@
 \section*{Statistical methodology and results} \label{Sec_Methods}
 
+\subsection*{Model fitting for Yield}
+A mixed effects model was fit, with the following covariates:
+\[ Y_{ijklmp} = \mu + \alpha_i + \beta_j + \gamma_{k(j)} + \delta_l + \eta_{m(l)} + \epsilon_{ijklmp} \]
+\begin{table}[H] \centering 
+\small
+\begin{tabular}{ l | l | l }
+\hline 
+\hline
+Fixed/Random effect & Factor & \\
+\hline
+\hline
+Response & yield & $Y$ \\
+\hline
+Fixed effect & intercept (Overall mean) & $\mu$ \\
+Fixed effect & vegetation type & $\alpha_i$, $i = 1,2$ \\
+Fixed effect & sorghum type & $\beta_j$, $j = 1,2$ \\
+Fixed effect & sorghum sub-type & $\gamma_{k(j)}$, $k = 1,2$, nested factor\\
+\hline
+Random effect & year & $\delta_l \sim \mathcal{N}(0, \sigma_{\delta}^2),\ \ l = 1,2$ \\
+Random effect & replicate & $\eta_{m(l)} \sim \text{ i.i.d. }\mathcal{N}(0, \sigma_{\eta}^2),\ \ m = 1,\dots,4$, nested factor\\
+Random effect & location & $\nu_p \sim \text{ i.i.d. } \mathcal{N}(0, \sigma_{\nu}^2),\ \ p = 1,2$ \\
+Random effect & residual error & $\epsilon_{ijklmpq} \sim \text{ i.i.d. } \mathcal{N}(0, \sigma^2),\ \ q = 1,2$ \\
+\hline 
+\hline
+\end{tabular} 
+\caption{Covariates of mixed effects model} 
+\label{Tab:Tab2} 
+\end{table} 
+
+Table \ref{Tab:Tab3} shows the different models fit and the final model (Model 3). It also shows the model with ``Height'' and ``Stem count'' added. In Model 3, the sorghum types PS and Sweet are not significantly different, but the subtypes are. This is also illustrated in fig \ref{fig:Fig2}. The response has been transformed to $\sqrt{\text{Yield}}$ to reduce heteroskedasticity. Fig \ref{fig:Fig3} displays the effect of this transformation. 
+\begin{figure}[H]
+\centering
+\includegraphics[scale = 0.5]{Resid_Yield.pdf}
+\label{fig:Fig3}
+\caption{Residuals with and without transformation of response}
+\end{figure}
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Mon, Mar 28, 2016 - 08:15:30 PM
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Mon, Mar 28, 2016 - 08:20:09 PM
+\begin{table}[H] \centering 
+\footnotesize
+  \caption{Model Selection for ``Yield''} 
+  \label{Tab:Tab3} 
+\begin{tabular}{@{\extracolsep{5pt}}lccc|c} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{4}{c}{$\sqrt{\text{Yield}}$ (ton per ac)} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
+\\[-1.8ex] &  &  & Final Model & Adding Ht and stem count\\ 
+\hline \\[-1.8ex] 
+ Veg\_TypeMulch & $-$0.84$^{***}$ & $-$0.84$^{***}$ & $-$0.84$^{***}$ & $-$0.54$^{***}$ \\ 
+  & (0.05) & (0.05) & (0.21) & (0.13) \\ 
+%  & & & & \\ 
+ Sorghum\_SubTypePS-TX13001 & 0.35$^{***}$ & 0.35$^{***}$ & 0.35$^{***}$ &  \\ 
+  & (0.07) & (0.07) & (0.06) &  \\ 
+%  & & & & \\ 
+ Sorghum\_SubTypeSW-TX09012 & 0.09 & 0.09 & 0.11$^{*}$ &  \\ 
+  & (0.07) & (0.07) & (0.06) &  \\ 
+%  & & & & \\ 
+ Sorghum\_SubTypeSW-TX09017 & 0.20$^{***}$ & 0.20$^{***}$ & 0.20$^{***}$ &  \\ 
+  & (0.07) & (0.07) & (0.06) &  \\ 
+%  & & & & \\ 
+ Sorghum\_TypeSweet &  &  &  & 0.09$^{**}$ \\ 
+  &  &  &  & (0.04) \\ 
+%  & & & & \\ 
+ Ht &  &  &  & 0.01$^{***}$ \\ 
+  &  &  &  & (0.001) \\ 
+%  & & & & \\ 
+ StemCount &  &  &  & 0.005$^{***}$ \\ 
+  &  &  &  & (0.001) \\ 
+%  & & & & \\ 
+ (Intercept) & 2.45$^{***}$ & 2.45$^{***}$ & 2.44$^{***}$ & 0.82$^{***}$ \\ 
+  & (0.29) & (0.28) & (0.28) & (0.19) \\ 
+\hline\\[-1.8ex]
+{\bf Random Effects} & Std.Dev. & Std.Dev. & Std.Dev. & Std.Dev.\\
+\hline\\[-1.8ex]
+Location - (Intercept) & 0.11 & 0.11 & 0.024 & 0.029\\
+%\\
+\hphantom{Location} - Veg\_TypeMulch &  -  &  -  & 0.29 & 0.18\\
+%\\
+Rep:Year - (Intercept) &  -  & 0.12 & 0.12 & 0.056\\
+%\\
+Year - (Intercept) & 0.38 & 0.38 & 0.39 & 0.17\\
+%\\
+Residual Standard Deviation & 0.29 & 0.27 & 0.25 & 0.19\\
+%  & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 128 & 128 & 128 & 128 \\ 
+Log Likelihood & $-$35.23 & $-$30.90 & $-$21.48 & 8.44 \\ 
+Akaike Inf. Crit. & 86.46 & 79.79 & 64.96 & 5.11 \\ 
+Bayesian Inf. Crit. & 109.28 & 105.46 & 96.33 & 36.48 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+Model 3 also has a random slope for vegetation type, for location. In fact, $\alpha_{\text{mulch}} = 0.84$, but, $\alpha_{\text{mulch, Arlington}} = -0.636$ and $\alpha_{\text{mulch, Lancaster}} = -1.04$. This difference in effect of location on the coefficient of vegetation type is also illustrated in Fig \ref{fig:Fig4}. Notice that adding ``Height'' and ``Stem count'' reduces the significance of sorghum sub-types, but increases the significance of sorghum type. In fact, $\beta_{\text{sweet}} = 0.09$. This is counter intuitive from the previous models and from the plots. The reason behind this multicollinearity. Both, height and stem count are correlated to each other and the response. They also have very similar relationship with sorghum types (and subtypes), as illustrated in Fig \ref{fig:Fig5}. Hence, it is advisable to not include these covariates when estimating the impact of sorghum types (and sub-types) and vegetation types on yield.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.8]{Plot2.pdf}
+\caption{Yield vs sorghum subtypes and location}
+\label{fig:Fig4}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{Plot_Ht_Stem.pdf}
+\caption{Height and Stem count vs Sorghum types}
+\label{fig:Fig5}
+\end{figure}
+
+\subsection*{Model fitting for NDFD}
+
+\subsection*{Model fitting for IVTD}
+
+\subsection*{Model fitting for IVTD*Yield}
+
+
 

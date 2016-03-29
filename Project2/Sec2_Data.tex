@@ -1,10 +1,9 @@
 \section*{Exploratory Analysis} \label{Sec_Data}
 
-As mentioned in \ref{Sec_Summary} the total yield and several chemical compositions of the biomass are of interest. Table \label{tab:Tab1} displays the correlation coefficients between these response variables. Notice that ``Height'' and ``Stem Count'' are both statistically significantly correlated (p-value $\sim 0$) with total yield. CP is the only response that is not significantly correlated with anything other than ``Stem Count''. 
+As mentioned in section \ref{Sec_Summary} the total yield and several chemical compositions of the biomass are of interest. Table \label{Tab:Tab1} displays the correlation coefficients between these response variables. Notice that ``Height'' and ``Stem Count'' are both statistically significantly correlated (p-value $\sim 0$) with ``Yield''. ``CP'' is the only response that is not significantly correlated with anything other than ``Stem Count''. 
 \begin{table}[H] \centering 
 \small
-\label{tab:Tab1} 
-\begin{tabular}{@{\extracolsep{5pt}} c p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm}} 
+\begin{tabular}{@{\extracolsep{5pt}} l p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm} p{1.5cm}} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
  & Yield & Height & Stem Count & CP & NDF & IVTD & NDFD \\ 
@@ -23,10 +22,33 @@ IVTD &  &  &  &  &  & 1 & 0.6178 (0.0000)  \\
 \hline \\[-1.8ex] 
 \end{tabular} 
 \caption{Correlation between different responses, with p-values in parentheses} 
+\label{Tab:Tab1} 
 \end{table} 
+
+Below are some exploratory plots of yield and other factors like ``sorghum type'' and ``vegetation type''. 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.57]{Plot0.pdf}
+\includegraphics[scale=0.57]{Plot1a.pdf}
+\caption{Yield vs sorghum type, vegetation types and years}
+\label{fig:Fig1}
+\end{figure}
+From fig \ref{fig:Fig1} it is not quite evident if the two types of sorghums, ``PS'' and ``Sweet'' have different yields. However, the yield in 2015 seems higher than that in 2014. 
 
 \begin{figure}[H]
 \centering
-\includegraphics[scale=1]{Plot2.pdf}
+\includegraphics[scale=0.57]{Plot1c.pdf}
+\includegraphics[scale=0.57]{Plot1b.pdf}
+\caption{Yield vs sorghum subtypes and location}
+\label{fig:Fig2}
 \end{figure}
+
+Fig \ref{fig:Fig2} shows that the different locations may not result in different average yields, but might result in different variability. It also shows that the ``PS'' subtype TX13001 shows higher yields compared to PS subtype TX08001. The two ``Sweet'' subtypes do not exhibit much difference. Although the subtypes were believed to produced similar yields, it is worth testing for the difference based on the boxplot above. 
+
+%\begin{figure}[H]
+%\centering
+%\includegraphics[scale=0.8]{Plot2.pdf}
+%\caption{Yield vs sorghum subtypes and location}
+%\label{fig:Fig3}
+%\end{figure}
 
