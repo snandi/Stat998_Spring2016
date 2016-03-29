@@ -1,6 +1,6 @@
 \section*{Summary} \label{Sec_Summary}
 \subsection*{Introduction}
-Scientists believe that {\bf{sorghum}} could meet the need for next-generation biofuels to be environmentally sustainable, easily adaptable by producers by taking advantage of existing agricultural infrastructure \cite{Dweikat_etal_2012_BBB}. However, sorghum needs a lot of energy (in the form of nitrogen) to produce the biomass. Previous research has shown that corn grown in fields that have been previously planted with kura clover obtains all of the nitrogen from the clover. A two-year study was conducted by Professor Ken Albrecht of UW Madison's Agronomy Department to compare the yields of four varieties of sorghum when grown under two different types of clover treatment. 
+Scientists believe that {\bf{sorghum}} could meet the need for next-generation biofuels to be environmentally sustainable, easily adaptable by producers by taking advantage of existing agricultural infrastructure. However, sorghum needs a lot of energy (in the form of nitrogen) to produce the biomass. Previous research has shown that corn grown in fields that have been previously planted with kura clover obtains all of the nitrogen from the clover. A two-year study was conducted by Professor Ken Albrecht of UW Madison's Agronomy Department to compare the yields of four varieties of sorghum when grown under two different types of clover treatment. 
 
 The study was conducted at two UW Research Farms: Arlington and Lancaster. At each farm for each year one area was used for the study. The two treatments of clover were ``conventional'' and ``mulch''.  In the conventional treatment, the clover was killed with herbicide more than one month before the sorghum was planted. For the mulch treatment, the clover was harvested before sorghum planting but allowed to regrow with the sorghum. 
 
@@ -15,5 +15,12 @@ detergent fiber (NDF) and NDFD, the fraction of NDF that can be digested, (iii) 
 \end{enumerate}
 
 \subsection*{Findings}
-
+A mixed effects model was fit, with year, location, and replication being random effects and vegetation types, sorghum types (and sub-types) being fixed effects. Following is a summary of the main findings:
+\begin{itemize}
+\item The year 2015 has higher yields than 2014. There is not enough evidence in the difference in the yields between Lancaster and Arlington. Vegetation type (Mulch or Conventional) had significant impact on yield. On an average, $\sqrt{Y_{\text{mulch}}} - \sqrt{Y_{\text{conv}}} = 0.84$. In addition, this was different for the two locations. For Arlington, $\sqrt{Y_{\text{mulch}}} - \sqrt{Y_{\text{conv}}} = 0.64$ and for Lancaster, $\sqrt{Y_{\text{mulch}}} - \sqrt{Y_{\text{conv}}} = 1.04$. 
+\item Contrary to the original belief, the two sorghum types ``PS'' and ``Sweet'' did not exhibit statistically significantly different yields. However, one of the PS sub-type TX08001 resulted in lower than the other PS sub-type TX13001 and both the Sweet sub-types. On an average, $\sqrt{Y_{\text{TX13001}}} - \sqrt{Y_{\text{TX08001}}} = 0.3537$. 
+\item All the variance estimates of the random effects were significantly different from 0. 
+\item Adding ``Height'' and ``Stem count'' to fit ``Yield'' reduced the significance of the sorghum sub-types, but increased the significance of sorghum type. However, this is contradictory to what can be observed in the plots and the different models. This is primarily because height and stem counts should be treated as responses in this study and both of them have strong correlations with the response and other covariates, thus increasing multicollinearity. 
+\item NDFD, IVTD exhibited similar relationships - sorghum sub-types more significant than sorghum type; vegetation type sigificant; year (and replicates nested within year) are significant. 
+\end{itemize}
 

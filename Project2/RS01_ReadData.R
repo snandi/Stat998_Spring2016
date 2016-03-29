@@ -99,25 +99,3 @@ qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = Location
 qplot() + geom_boxplot(aes(y = Yield_tonperac, x = Sorghum_Type, fill = LocYear), data = Data) +
   facet_wrap(~ Veg_Type) 
 
-###################################################################################
-## NDFD
-###################################################################################
-Plot1a_ndfd <- qplot() + geom_boxplot(aes(y = NDFD, x = Sorghum_Type, fill = Year), data = Data) +
-  facet_wrap(~ Veg_Type) + ylab(label = 'NDFD') + xlab(label = 'Sorghum type') +
-  theme(legend.position = 'top', 
-        strip.text.x = element_text(size = 9), 
-        axis.text.x = element_text(size = 7), 
-        axis.text.y = element_text(size = 7), 
-        axis.title.x = element_text(size = 9),
-        axis.title.y = element_text(size = 9)
-  )
-
-Plot1b_ndfd <- qplot() + geom_boxplot(aes(y = NDFD, x = Sorghum_Type, fill = Sorghum_SubType), data = Data) +
-  facet_wrap(~ Year) + ylab(label = 'NDFD') + xlab(label = 'Sorghum type') +
-  theme(legend.position = 'top', 
-        strip.text.x = element_text(size = 9), 
-        axis.text.x = element_text(size = 7), 
-        axis.text.y = element_text(size = 7), 
-        axis.title.x = element_text(size = 9),
-        axis.title.y = element_text(size = 9)
-  )

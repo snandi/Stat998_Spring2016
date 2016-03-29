@@ -26,12 +26,21 @@ load(Filename)
 dim(Data)
 str(Data)
 
+Model1 <- lm(NDFD ~ 1 + Veg_Type + Sorghum_SubType, 
+               data = Data)
+summary(Model1)
+TukeyHSD(aov(NDFD ~ 1 + Veg_Type + Sorghum_SubType, 
+             data = Data))
+
+
 ########################################################################
 ## Model 2: Yield ~ 
 ########################################################################
 Model2 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Year), 
                data = Data)
 summary(Model2)
+X2 <- -2*(logLik(Model1) - logLik(Model2, REML = F))
+pchisq(q = X2, df = 1, lower.tail = F)
 
 ########################################################################
 ## Model 3: Yield ~ 
@@ -51,13 +60,48 @@ summary(Model4)
 anova(Model3, Model4)
 qplot() + geom_point(aes(y = residuals(Model4), x = fitted.values(Model4)))
 
-########################################################################
-## Model 5: Yield ~ 
-########################################################################
-Model5 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Year/Rep) + (1 + Veg_Type|Location), 
+Model4.1 <- lmer(NDFD ~ 1 + Sorghum_SubType + (1|Year/Rep) + (1|Location), 
                data = Data)
-summary(Model5)
-anova(Model4, Model5)
-qplot() + geom_point(aes(y = residuals(Model5), x = fitted.values(Model5)))
+anova(Model4.1, Model4)
 
+Model4.2 <- lmer(NDFD ~ 1 + Veg_Type + (1|Year/Rep) + (1|Location), 
+                 data = Data)
+anova(Model4.2, Model4)
 
+Model4.3 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Location/Rep), 
+                 data = Data)
+anova(Model4.3, Model4)
+
+Model4.4 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Year) + (1|Location), 
+                 data = Data)
+anova(Model4.4, Model4)
+
+Model4.5 <- lmer(NDFD ~ 1 + Veg_Type + Sorghum_SubType + (1|Year/Rep), 
+                 data = Data)
+anova(Model4.5, Model4)
+
+###################################################################################
+## NDFD
+###################################################################################
+Plot1a_ndfd <- qplot() + geom_boxplot(aes(y = NDFD, x = Sorghum_Type, fill = Year), data = Data) +
+  facet_wrap(~ Veg_Type) + ylab(label = 'NDFD') + xlab(label = 'Sorghum type') +
+  theme(legend.position = 'top', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+  )
+
+Plot1b_ndfd <- qplot() + geom_boxplot(aes(y = NDFD, x = Sorghum_Type, fill = Sorghum_SubType), data = Data) +
+  facet_wrap(~ Year) + ylab(label = 'NDFD') + xlab(label = 'Sorghum type') +
+  theme(legend.position = 'top', 
+        strip.text.x = element_text(size = 9), 
+        axis.text.x = element_text(size = 7), 
+        axis.text.y = element_text(size = 7), 
+        axis.title.x = element_text(size = 9),
+        axis.title.y = element_text(size = 9)
+  )
+Filename <- paste0(RScriptPath, 'Plot_NDFD.pdf') 
+ggsave(filename = Filename, plot = grid.arrange(Plot1a_ndfd, Plot1b_ndfd, nrow=1), 
+       device = 'pdf', width = 8, height = 4, units = 'in')

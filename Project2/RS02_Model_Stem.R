@@ -26,47 +26,51 @@ load(Filename)
 dim(Data)
 str(Data)
 
-Data$Sor
-
-Model1 <- lm(log(IVTD) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType, 
+Model1 <- lm(log(StemCount) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType, 
                data = Data)
 summary(Model1)
-logLik(Model1)
-IVTD_Tukey <- TukeyHSD(aov(log(IVTD) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + Year, 
+
+TukeyHSD(aov(StemCount ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType, 
              data = Data))
-IVTD_Tukey$Sorghum_SubType
-xtable(IVTD_Tukey$Sorghum_SubType, digits = c(0, 4, 4, 4, 4))
 
 ########################################################################
 ## Model 2: Yield ~ 
 ########################################################################
-Model2 <- lmer(log(IVTD) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Year), 
+Model2 <- lmer(log(StemCount) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Year), 
                data = Data)
 summary(Model2)
-anova(Model1, Model2)
-logLik(Model2)
-
 X2 <- -2*(logLik(Model1) - logLik(Model2, REML = F))
 pchisq(q = X2, df = 1, lower.tail = F)
-qplot() + geom_point(aes(y = residuals(Model2), x = fitted.values(Model2)))
 
-Model2.1 <- lmer(log(IVTD) ~ 1 + Sorghum_Type + Sorghum_SubType + (1|Year), 
+########################################################################
+## Model 3: Yield ~ 
+########################################################################
+Model3 <- lmer(log(StemCount) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Year) + (1|Location), 
                data = Data)
-anova(Model2.1, Model2)
+summary(Model3)
+anova(Model2, Model3)
+qplot() + geom_point(aes(y = residuals(Model3), x = fitted.values(Model3)))
 
-Model2.2 <- lmer(log(IVTD) ~ 1 + Veg_Type + Sorghum_SubType + (1|Year), 
+Model3.1 <- lmer(log(StemCount) ~ 1 + Sorghum_Type + Sorghum_SubType + (1|Year) + (1|Location), 
+               data = Data)
+anova(Model3.1, Model3)
+
+Model3.2 <- lmer(log(StemCount) ~ 1 + Veg_Type + Sorghum_SubType + (1|Year) + (1|Location), 
                  data = Data)
-anova(Model2.2, Model2)
+anova(Model3.2, Model3)
 
-Model2.3 <- lmer(log(IVTD) ~ 1 + Veg_Type + Sorghum_Type + (1|Year), 
+Model3.3 <- lmer(log(StemCount) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Location), 
                  data = Data)
-anova(Model2.3, Model2)
+anova(Model3.3, Model3)
 
+Model3.4 <- lmer(log(StemCount) ~ 1 + Veg_Type + Sorghum_Type + Sorghum_SubType + (1|Year), 
+                 data = Data)
+anova(Model3.4, Model3)
 ###################################################################################
-## IVTD
+## StemCount
 ###################################################################################
-Plot1a_ivtd <- qplot() + geom_boxplot(aes(y = IVTD, x = Sorghum_Type, fill = Year), data = Data) +
-  facet_wrap(~ Veg_Type) + ylab(label = 'IVTD') + xlab(label = 'Sorghum type') +
+Plot1a_StemCount <- qplot() + geom_boxplot(aes(y = StemCount, x = Sorghum_Type, fill = Year), data = Data) +
+  facet_wrap(~ Veg_Type) + ylab(label = 'StemCount') + xlab(label = 'Sorghum type') +
   theme(legend.position = 'top', 
         strip.text.x = element_text(size = 9), 
         axis.text.x = element_text(size = 7), 
@@ -75,8 +79,8 @@ Plot1a_ivtd <- qplot() + geom_boxplot(aes(y = IVTD, x = Sorghum_Type, fill = Yea
         axis.title.y = element_text(size = 9)
   )
 
-Plot1b_ivtd <- qplot() + geom_boxplot(aes(y = IVTD, x = Sorghum_Type, fill = Sorghum_SubType), data = Data) +
-  facet_wrap(~ Year) + ylab(label = 'IVTD') + xlab(label = 'Sorghum type') +
+Plot1b_StemCount <- qplot() + geom_boxplot(aes(y = StemCount, x = Sorghum_Type, fill = Sorghum_SubType), data = Data) +
+  facet_wrap(~ Year) + ylab(label = 'StemCount') + xlab(label = 'Sorghum type') +
   theme(legend.position = 'top', 
         strip.text.x = element_text(size = 9), 
         axis.text.x = element_text(size = 7), 
@@ -84,7 +88,6 @@ Plot1b_ivtd <- qplot() + geom_boxplot(aes(y = IVTD, x = Sorghum_Type, fill = Sor
         axis.title.x = element_text(size = 9),
         axis.title.y = element_text(size = 9)
   )
-
-Filename <- paste0(RScriptPath, 'Plot_IVTD.pdf') 
-ggsave(filename = Filename, plot = grid.arrange(Plot1a_ivtd, Plot1b_ivtd, nrow=1), 
+Filename <- paste0(RScriptPath, 'Plot_StemCount.pdf') 
+ggsave(filename = Filename, plot = grid.arrange(Plot1a_StemCount, Plot1b_StemCount, nrow=1), 
        device = 'pdf', width = 8, height = 4, units = 'in')

@@ -200,3 +200,24 @@ Plot_Stem <- qplot() + geom_boxplot(aes(y = StemCount, x = Sorghum_Type, fill = 
 Filename <- paste0(RScriptPath, 'Plot_Ht_Stem.pdf') 
 ggsave(filename = Filename, plot = grid.arrange(Plot_Ht, Plot_Stem, nrow=1), 
        device = 'pdf', width = 7, height = 4, units = 'in')
+
+################## FINAL MODEL ##################
+Model6b <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_SubType + 
+                  (1 + Veg_Type | Location ) + (1|Year/Rep) , 
+                data = Data)
+summary(Model6b)
+
+Model6b.1 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_SubType + 
+                  (1 + Veg_Type | Location ) + (1|Location/Rep) , 
+                data = Data)
+anova(Model6b.1, Model6b)
+
+Model6b.2 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_SubType + 
+                  (1 + Veg_Type | Location ) + (1|Year) , 
+                data = Data)
+anova(Model6b.2, Model6b)
+
+Model6b.3 <- lmer(sqrt(Yield_tonperac) ~ 1 + Veg_Type + Sorghum_SubType + 
+                     + (1|Year/Rep) , 
+                  data = Data)
+anova(Model6b.3, Model6b)
