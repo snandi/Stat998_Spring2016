@@ -1,0 +1,310 @@
+\section*{Statistical methodology and results} \label{Sec_Methods}
+
+\subsection*{Model fitting for Yield}
+A mixed effects model was fit, with the following covariates:
+\[ Y_{ijklmp} = \mu + \alpha_i + \beta_j + \gamma_{k(j)} + \delta_l + \eta_{m(l)} + \nu_p + \epsilon_{ijklmpq} \]
+\begin{table}[H] \centering 
+\small
+\begin{tabular}{ l | l | l }
+\hline 
+\hline
+Fixed/Random effect & Factor & \\
+\hline
+\hline
+Response & yield & $Y$ \\
+\hline
+Fixed effect & intercept (Overall mean) & $\mu$ \\
+Fixed effect & vegetation type & $\alpha_i$, $i = 1,2$ \\
+Fixed effect & sorghum type & $\beta_j$, $j = 1,2$ \\
+Fixed effect & sorghum sub-type & $\gamma_{k(j)}$, $k = 1,2$, nested factor\\
+\hline
+Random effect & year & $\delta_l \sim \mathcal{N}(0, \sigma_{\delta}^2),\ \ l = 1,2$ \\
+Random effect & replicate & $\eta_{m(l)} \sim \text{ i.i.d. }\mathcal{N}(0, \sigma_{\eta}^2),\ \ m = 1,\dots,4$, nested factor\\
+Random effect & location & $\nu_p \sim \text{ i.i.d. } \mathcal{N}(0, \sigma_{\nu}^2),\ \ p = 1,2$ \\
+Random effect & residual error & $\epsilon_{ijklmpq} \sim \text{ i.i.d. } \mathcal{N}(0, \sigma^2),\ \ q = 1,2$ \\
+\hline 
+\hline
+\end{tabular} 
+\caption{Covariates of mixed effects model} 
+\label{Tab:Tab2} 
+\end{table} 
+
+Table \ref{Tab:Tab3} shows the different models fit and the final model (Model 3). It also shows the model with ``Height'' and ``Stem count'' added. In Model 3, the sorghum types PS and Sweet are not significantly different, but the sub-types are. This is also illustrated in fig \ref{fig:Fig2}. The response has been transformed to $\sqrt{\text{Yield}}$ to reduce heteroskedasticity. Fig\ref{fig:Fig3} displays the effect of this transformation. 
+\vspace{-1cm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale = 0.5]{Resid_Yield.pdf}
+\label{fig:Fig3}
+\caption{Residuals with and without transformation of response}
+\end{figure}
+
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Mon, Mar 28, 2016 - 08:15:30 PM
+% Table created by stargazer v.5.2 by Marek Hlavac, Harvard University. E-mail: hlavac at fas.harvard.edu
+% Date and time: Mon, Mar 28, 2016 - 08:20:09 PM
+\begin{table}[H] \centering 
+\footnotesize
+  \caption{Model Selection for ``Yield''} 
+  \label{Tab:Tab3} 
+\begin{tabular}{@{\extracolsep{5pt}}lccc|c} 
+\\[-1.8ex]\hline 
+\hline \\[-1.8ex] 
+ & \multicolumn{4}{c}{\textit{Dependent variable:}} \\ 
+\cline{2-5} 
+\\[-1.8ex] & \multicolumn{4}{c}{$\sqrt{\text{Yield}}$ (ton per ac)} \\ 
+\\[-1.8ex] & (1) & (2) & (3) & (4)\\ 
+\\[-1.8ex] &  &  & Final Model & Adding Ht and stem count\\ 
+\hline \\[-1.8ex] 
+ Veg\_Type Mulch & $-$0.84$^{***}$ & $-$0.84$^{***}$ & $-$0.84$^{***}$ & $-$0.54$^{***}$ \\ 
+  & (0.05) & (0.05) & (0.21) & (0.13) \\ 
+%  & & & & \\ 
+ Sorghum\_SubTypePS-TX13001 & 0.35$^{***}$ & 0.35$^{***}$ & 0.35$^{***}$ &  \\ 
+  & (0.07) & (0.07) & (0.06) &  \\ 
+%  & & & & \\ 
+ Sorghum\_SubTypeSW-TX09012 & 0.09 & 0.09 & 0.11$^{*}$ &  \\ 
+  & (0.07) & (0.07) & (0.06) &  \\ 
+%  & & & & \\ 
+ Sorghum\_SubTypeSW-TX09017 & 0.20$^{***}$ & 0.20$^{***}$ & 0.20$^{***}$ &  \\ 
+  & (0.07) & (0.07) & (0.06) &  \\ 
+%  & & & & \\ 
+ Sorghum\_Type Sweet &  &  &  & 0.09$^{**}$ \\ 
+  &  &  &  & (0.04) \\ 
+%  & & & & \\ 
+ Ht &  &  &  & 0.01$^{***}$ \\ 
+  &  &  &  & (0.001) \\ 
+%  & & & & \\ 
+ Stem Count &  &  &  & 0.005$^{***}$ \\ 
+  &  &  &  & (0.001) \\ 
+%  & & & & \\ 
+ (Intercept) & 2.45$^{***}$ & 2.45$^{***}$ & 2.44$^{***}$ & 0.82$^{***}$ \\ 
+  & (0.29) & (0.28) & (0.28) & (0.19) \\ 
+\hline\\[-1.8ex]
+{\bf Random Effects} & Std.Dev. & Std.Dev. & Std.Dev. & Std.Dev.\\
+\hline\\[-1.8ex]
+Location - (Intercept) & 0.11 & 0.11 & 0.024 & 0.029\\
+%\\
+\hphantom{Location} - Veg\_Type Mulch &  -  &  -  & 0.29 & 0.18\\
+%\\
+Rep:Year - (Intercept) &  -  & 0.12 & 0.12 & 0.056\\
+%\\
+Year - (Intercept) & 0.38 & 0.38 & 0.39 & 0.17\\
+%\\
+Residual Standard Deviation & 0.29 & 0.27 & 0.25 & 0.19\\
+%  & & & & \\ 
+\hline \\[-1.8ex] 
+Observations & 128 & 128 & 128 & 128 \\ 
+Log Likelihood & $-$35.23 & $-$30.90 & $-$21.48 & 8.44 \\ 
+Akaike Inf. Crit. & 86.46 & 79.79 & 64.96 & 5.11 \\ 
+Bayesian Inf. Crit. & 109.28 & 105.46 & 96.33 & 36.48 \\ 
+\hline 
+\hline \\[-1.8ex] 
+\textit{Note:}  & \multicolumn{4}{r}{$^{*}$p$<$0.1; $^{**}$p$<$0.05; $^{***}$p$<$0.01} \\ 
+\end{tabular} 
+\end{table} 
+
+The following mixed effects model was fit, with the following covariates, with $\sqrt{\text{Yield}}$ as the response:
+\[ Y_{iklmpq} = \mu + \beta_j + \gamma_k + \delta_l + \eta_{m(l)} + \alpha_{ip}\nu_p +  \epsilon_{iklpq} \]
+where, $i = 1,2; \ j = 1,2; \ k = 1, 2; \ l = 1,2; \ m = 1,\dots,4; \ p = 1, 2; $. Below is the result:
+
+\begin{table}[H] \centering 
+\small
+\begin{tabular}{ l | p{3.5cm} | l | p{4.5cm} | l }
+\hline 
+\hline
+Variable & Description & Hypothesis & Estimate & p-value \\
+\hline
+$\mu$ 		& Intercept 		& $\mu = 0$ 			& $2.443$ 							& $0.0649$ \\
+$\alpha$	& Vegetation type 	& $\alpha_1 = \alpha_2 $ 	& $\alpha_{\text{mulch}} - \alpha_{\text{conv}} = -0.8378$ 	& $0.0156$ \\
+$\gamma$	& Sorghum Sub-type 	& $\gamma_1 = \dots = \gamma_2$	& $\gamma_{\text{TX13001}} - \gamma_{\text{TX08001}}= 0.3537$	& $0$ \\
+$\sigma_{\delta}^2$ & Year (random)	& $\sigma_{\delta}^2 = 0$	& $\sigma_{\delta} = 0.1485$					& $0$ \\
+$\sigma_{\eta}^2$ & Replication(random)	& $\sigma_{\eta}^2 = 0$		& $\sigma_{\eta} = 0.0149$					& $0.0005$ \\
+$\sigma_{\nu}^2$ & Location(random)	& $\sigma_{\nu}^2 = 0$		& $\sigma_{\nu} = 0.0843$					& $0$ \\
+$\alpha_{ip}$ 	& Veg Type \& Location (random slope)	& $\alpha_{1p} = \alpha_{2p}, p = 1,2$		& $\alpha_{\text{m,A}} - \alpha_{\text{c,A}} = -0.636$; $\alpha_{\text{m,L}} - \alpha_{\text{c,L}} = -1.04$ & $0$ \\
+\hline
+\end{tabular} 
+\caption{Results of the mixed effects model (p values are of likelihood ratio tests)} 
+\label{Tab:Tab10} 
+\end{table} 
+
+Model 3 also has a random slope for vegetation type, for location. In fact, $\alpha_{\text{mulch}} = 0.84$, but, $\alpha_{\text{mulch, Arlington}} = -0.636$ and $\alpha_{\text{mulch, Lancaster}} = -1.04$. This difference in effect of location on the coefficient of vegetation type is also illustrated in Fig \ref{fig:Fig4} in Appendix. Notice that adding ``Height'' and ``Stem count'' reduces the significance of sorghum sub-types, but increases the significance of sorghum type. In fact, $\beta_{\text{sweet}} = 0.09$. This is counter intuitive from the previous models and from the plots. The reason behind this multicollinearity. 
+\vspace{-1cm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.7]{Plot_Ht_Stem.pdf}
+\caption{Height and Stem count vs Sorghum types}
+\label{fig:Fig5}
+\end{figure}
+Both, height and stem count are strongly correlated to the response. They also have very similar relationship with sorghum types (and sub-types), as illustrated in Fig \ref{fig:Fig5}. Hence, it is advisable to not include these covariates when estimating the impact of sorghum types (and sub-types) and vegetation types on yield. They should be treated as response variables instead of adding as covariates.
+
+\subsection*{Model fitting for NDFD}
+Similar to yield, NDFD also exhibits some differences across years and sorghum sub-types, see fig \ref{fig:Fig6}
+\vspace{-1cm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.75]{Plot_NDFD.pdf}
+\caption{NDFD vs sorghum sub-types and years}
+\label{fig:Fig6}
+\end{figure}
+
+The following mixed effects model was fit, with the following covariates, with NDFD as the response:
+\[ Y_{iklmpq} = \mu + \alpha_i + \gamma_k + \delta_l + \eta_{m(l)} + \nu_p +  \epsilon_{iklmpq} \]
+where, $i = 1,2; \ k = 1, \dots, 4; \ l = 1,2; \ m = 1, \dots, 4;\ p = 1, 2; $. Below is the result:
+
+\begin{table}[H] \centering 
+\small
+\begin{tabular}{ l | l | l | l | l }
+\hline 
+\hline
+Variable & Description & Hypothesis & Estimate & p-value \\
+\hline
+$\mu$ 		& Intercept 		& $\mu = 0$ 			& $577.933$ 							& $0.001$ \\
+$\alpha$	& Vegetation type 	& $\alpha_1 = \alpha_2 $ 	& $\alpha_{\text{mulch}} - \alpha_{\text{conv}} = 42.97$ 	& $0$ \\
+$\gamma$	& Sorghum sub-type	& $\gamma_1 = \dots = \gamma_4$	& $\gamma_{\text{TX13001}} - \gamma_{\text{TX08001}}= 40.7$	& $0.0012$ \\
+$\sigma_{\delta}^2$ & Year (random)	& $\sigma_{\delta}^2 = 0$	& $\sigma_{\delta} = 22.33$					& $0.0001$ \\
+$\sigma_{\eta}^2$ & Replication(random)	& $\sigma_{\eta}^2 = 0$		& $\sigma_{\eta} = 14.71$					& $0.0177$ \\
+$\sigma_{\nu}^2$ & Location(random)	& $\sigma_{\nu}^2 = 0$		& $\sigma_{\nu} = 16.51$					& $0.0062$ \\
+\hline
+\end{tabular} 
+\caption{Results of the mixed effects model (p values are of likelihood ratio tests)} 
+\label{Tab:Tab4} 
+\end{table} 
+
+\subsection*{Model fitting for IVTD}
+Fig \ref{fig:Fig7} illustrates the relationship between IVTD and sorghum types, vegetation types and years.
+\vspace{-1cm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.75]{Plot_IVTD.pdf}
+\caption{IVTD vs sorghum sub-types and years}
+\label{fig:Fig7}
+\end{figure}
+
+The following mixed effects model was fit, with the following covariates, with $\log{\text{IVTD}}$ as the response (to reduce heteroskedasticity): 
+\[ Y_{iklmpq} = \mu + \alpha_i + \beta_j + \gamma_k + \delta_l \epsilon_{ijklq} \]
+where, $i = 1,2; \ k = 1, \dots, 4; \ l = 1,2; $. Below is the result:
+
+\begin{table}[H] \centering 
+\small
+\begin{tabular}{ l | l | l | l | l }
+\hline 
+\hline
+Variable & Description & Hypothesis & Estimate & p-value \\
+\hline
+$\mu$ 		& Intercept 		& $\mu = 0$ 			& $6.617$ 							& $0.0002$ \\
+$\alpha$	& Vegetation type 	& $\alpha_1 = \alpha_2 $ 	& $\alpha_{\text{mulch}} - \alpha_{\text{conv}} = 0.0154$ 	& $0.0460$ \\
+$\beta$		& Sorghum type		& $\beta_1 = \beta_2$		& $\beta_{\text{SW}} - \beta_{\text{PS}}= 0.0459$		& $0$ \\
+$\gamma$	& Sorghum sub-type	& $\gamma_1 = \dots = \gamma_4$	& $\gamma_{\text{TX13001}} - \gamma_{\text{TX08001}}= -0.0584$	& $0$ \\
+$\sigma_{\delta}^2$ & Year (random)	& $\sigma_{\delta}^2 = 0$	& $\sigma_{\delta} = 0.0255$					& $0.0001$ \\
+\hline
+\end{tabular} 
+\caption{Results of the mixed effects model (p$-$values are of likelihood ratio tests)} 
+\label{Tab:Tab5} 
+\end{table} 
+The different sorghum sub-types all result in different average values of IVTD. In fact, a post-hoc test on the linear model fit between IVTD and sorghum types and sub types yields the following result
+
+% latex table generated in R 3.2.2 by xtable 1.8-0 package
+% Tue Mar 29 01:02:23 2016
+\begin{table}[H]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+ & diff & lwr & upr & p adj \\ 
+  \hline
+  PS-TX13001-PS-TX08001 & -0.0583 & -0.0868 & -0.0299 & 0.0000 \\ 
+  SW-TX09012-PS-TX08001 & -0.0181 & -0.0466 & 0.0103 & 0.3488 \\ 
+  SW-TX09017-PS-TX08001 & -0.0402 & -0.0687 & -0.0117 & 0.0020 \\ 
+  SW-TX09012-PS-TX13001 & 0.0402 & 0.0117 & 0.0687 & 0.0020 \\ 
+  SW-TX09017-PS-TX13001 & 0.0181 & -0.0103 & 0.0466 & 0.3488 \\ 
+  SW-TX09017-SW-TX09012 & -0.0220 & -0.0505 & 0.0064 & 0.1872 \\ 
+  \hline
+\end{tabular}
+\caption{Pairwise test of different sorghum sub-types} 
+\label{Tab:Tab6} 
+\end{table}
+
+\subsection*{Model fitting for IVTD*Yield}
+Fig \ref{fig:Fig8} illustrates the relationship between IVTD*Yield and sorghum types, vegetation types and years.
+\vspace{-1cm}
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.75]{Plot_IVTD_Yield.pdf}
+\caption{IVTD vs sorghum sub-types and years}
+\label{fig:Fig8}
+\end{figure}
+
+The following mixed effects model was fit, with the following covariates, with $\sqrt{\text{IVTD*Yield}}$ as the response:
+\[ Y_{iklmpq} = \mu + \beta_j + \gamma_k + \delta_l + \eta_{m(l)} + \alpha_{ip}\nu_p +  \epsilon_{iklpq} \]
+where, $i = 1,2; \ j = 1,2; \ k = 1, 2; \ l = 1,2; \ m = 1,\dots,4; \ p = 1, 2; $. Below is the result:
+
+\begin{table}[H] \centering 
+\small
+\begin{tabular}{ l | p{3.5cm} | l | p{4.5cm} | l }
+\hline 
+\hline
+Variable & Description & Hypothesis & Estimate & p-value \\
+\hline
+$\mu$ 		& Intercept 		& $\mu = 0$ 			& $74.284$ 							& $0.003$ \\
+$\alpha$	& Vegetation type 	& $\alpha_1 = \alpha_2 $ 	& $\alpha_{\text{mulch}} - \alpha_{\text{conv}} = -22.648$ 	& $0.0163$ \\
+$\beta$		& Sorghum type 		& $\alpha_1 = \alpha_2 $ 	& $\beta_{\text{SW}} - \beta_{\text{PS}}= -1.431$	 	& $0.3257$ \\
+$\gamma$	& Sub-type TX08001	& $\gamma_1 = \gamma_2$		& $\gamma_{\text{TX08001}} - \gamma_{\text{Others}}= -7.741$	& $0$ \\
+$\sigma_{\delta}^2$ & Year (random)	& $\sigma_{\delta}^2 = 0$	& $\sigma_{\delta} = 6.503$					& $0$ \\
+$\sigma_{\eta}^2$ & Replication(random)	& $\sigma_{\eta}^2 = 0$		& $\sigma_{\eta} = 3.102$					& $0.0067$ \\
+$\sigma_{\nu}^2$ & Location(random)	& $\sigma_{\nu}^2 = 0$		& $\sigma_{\nu} = 7.012$					& $0.0001$ \\
+$\alpha_{ip}$ 	& Veg Type \& Location (random slope)	& $\alpha_{1p} = \alpha_{2p}, p = 1,2$		& $\alpha_{\text{m,A}} - \alpha_{\text{c,A}} = -17.766$; $\alpha_{\text{m,L}} - \alpha_{\text{c,L}} = -27.530$ & $0.0001$ \\
+
+\hline
+\end{tabular} 
+\caption{Results of the mixed effects model (p values are of likelihood ratio tests)} 
+\label{Tab:Tab7} 
+\end{table} 
+
+\subsection*{Model fitting for Height}
+Fig \ref{fig:Fig9} in appendix illustrates the relationship between Height and sorghum types, vegetation types and years. The following mixed effects model was fit, with the following covariates, with Height as the response:
+\[ Y_{iklmpq} = \mu + \alpha_i + \gamma_k + \delta_l + \eta_{m(l)} + \nu_p +  \epsilon_{iklmpq} \]
+where, $i = 1,2; \ k = 1, \dots, 4; \ l = 1,2; \ m = 1, \dots, 4;\ p = 1, 2; $. Below is the result:
+
+\begin{table}[H] \centering 
+\small
+\begin{tabular}{ l | l | l | l | l }
+\hline 
+\hline
+Variable & Description & Hypothesis & Estimate & p-value \\
+\hline
+$\mu$ 		& Intercept 		& $\mu = 0$ 			& $116.91$ 							& $0.0134$ \\
+$\alpha$	& Vegetation type 	& $\alpha_1 = \alpha_2 $ 	& $\alpha_{\text{mulch}} - \alpha_{\text{conv}} = -20.94$ 	& $0$ \\
+$\gamma$	& Sorghum sub-type	& $\gamma_1 = \dots = \gamma_4$	& $\gamma_{\text{TX13001}} - \gamma_{\text{TX08001}}= 15.688$	& $0$ \\
+$\sigma_{\delta}^2$ & Year (random)	& $\sigma_{\delta}^2 = 0$	& $\sigma_{\delta} = 6.126$					& $0.0001$ \\
+$\sigma_{\eta}^2$ & Replication(random)	& $\sigma_{\eta}^2 = 0$		& $\sigma_{\eta} = 4.719$					& $0.0107$ \\
+$\sigma_{\nu}^2$ & Location(random)	& $\sigma_{\nu}^2 = 0$		& $\sigma_{\nu} = 12.103$					& $0$ \\
+\hline
+\end{tabular} 
+\caption{Results of the mixed effects model (p values are of likelihood ratio tests)} 
+\label{Tab:Tab8} 
+\end{table} 
+
+\subsection*{Model fitting for Stem count}
+Fig \ref{fig:Fig10} in appendix illustrates the relationship between stem count and sorghum types, vegetation types and years.
+
+The following mixed effects model was fit, with the following covariates, with $\log(\text{StemCount})$ as the response:
+\[ Y_{iklpq} = \mu + \alpha_i + \gamma_k + \delta_l + \nu_p +  \epsilon_{iklpq} \]
+where, $i = 1,2; \ k = 1, \dots, 4; \ l = 1,2;\ p = 1, 2; $. Below is the result:
+
+\begin{table}[H] \centering 
+\small
+\begin{tabular}{ l | l | l | l | l }
+\hline 
+\hline
+Variable & Description & Hypothesis & Estimate & p-value \\
+\hline
+$\mu$ 		& Intercept 		& $\mu = 0$ 			& $4.174$ 							& $0.0166$ \\
+$\alpha$	& Vegetation type 	& $\alpha_1 = \alpha_2 $ 	& $\alpha_{\text{mulch}} - \alpha_{\text{conv}} = -0.1891$ 	& $0$ \\
+$\beta$		& Sorghum type 		& $\beta_1 = \beta_2 $ 		& $\beta_{\text{Sweet}} - \alpha_{\text{PS}} = 0.4157$ 		& $0$ \\
+$\gamma$	& Sorghum sub-type	& $\gamma_1 = \dots = \gamma_4$	& $\gamma_{\text{TX13001}} - \gamma_{\text{TX08001}}= 0.5422$	& $0$ \\
+$\sigma_{\delta}^2$ & Year (random)	& $\sigma_{\delta}^2 = 0$	& $\sigma_{\delta} = 0.1193$					& $0$ \\
+$\sigma_{\nu}^2$ & Location(random)	& $\sigma_{\nu}^2 = 0$		& $\sigma_{\nu} = 0.0187$					& $0$ \\
+\hline
+\end{tabular} 
+\caption{Results of the mixed effects model (p values are of likelihood ratio tests)} 
+\label{Tab:Tab9} 
+\end{table} 
+
