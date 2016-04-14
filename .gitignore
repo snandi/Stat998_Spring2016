@@ -36,3 +36,6 @@ Diesel/*.aux
 *.png
 *.jpg
 *.jpeg
+.nav
+.snm
+.toc

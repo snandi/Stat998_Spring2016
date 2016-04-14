@@ -1,5 +1,8 @@
+###########################################################################
+## This function plots ASD and SE of same leaf together
+###########################################################################
 plot_pairs <- function(LongData){
-  Plot <- qplot() + geom_line(aes(x = Wavelength, y = Intensity, col = factor(SimpleInstr)), data = LongData, size = 2) +
+  Plot <- qplot() + geom_line(aes(x = Wavelength, y = Intensity, col = factor(SimpleInstr)), data = LongData, size = 1.5) +
     ggtitle(label = LongData$Spectra[1]) + 
     ylab(label = '') + 
     theme(legend.position = 'top') +
@@ -8,6 +11,22 @@ plot_pairs <- function(LongData){
   return(Plot)
 }
 
+###########################################################################
+## This function plots the difference, one leaf at a time
+###########################################################################
+plot_diff <- function(DiffData){
+  Plot <- qplot() + geom_line(aes(x = Wavelength, y = Diff), data = DiffData, size = 1.5)
+  Plot <- Plot + ggtitle(label = LongData$Spectra[1])
+  Plot <- Plot + ylab(label = 'Difference')
+  Plot <- Plot + theme(legend.position = 'top')
+  Plot <- Plot + geom_hline(yintercept = 0, lty = 2)
+
+  return(Plot)
+}
+
+###########################################################################
+## This function prepares the data in the long format, for 1 leaf at a time
+###########################################################################
 fn_longData_byRow <- function(Data_cal, Row){
   Wavelength <- 350:2500
   Intensity.ASD <- as.numeric(as.vector(Data_cal[Row, colnames_ASD]))
@@ -40,5 +59,20 @@ fn_longData_byRow <- function(Data_cal, Row){
     Intensity <- as.numeric(Intensity)
     Wavelength <- as.numeric(Wavelength)
   })
-  return(LongData)  
+
+  ######## Difference between the two instruments
+  Intensity.Diff <- Intensity.ASD - Intensity.SE
+  DiffData <- as.data.frame(cbind(Wavelength = Wavelength, 
+                                  Diff = as.numeric(Intensity.Diff), 
+                                  Name = as.vector(Data_cal[Row, 'Name_long.x']),
+                                  Species = as.vector(Data_cal[Row, 'Species']),
+                                  SpeciesCat = as.vector(Data_cal[Row, 'SpeciesCat']),
+                                  Spectra = as.vector(Data_cal[Row, 'Spectra'])
+  ), stringsAsFactors = F)
+  DiffData <- within(data = DiffData,{
+    Diff <- as.numeric(Diff)
+    Wavelength <- as.numeric(Wavelength)
+  })
+  
+  return(list(DiffData = DiffData, LongData = LongData))  
 }

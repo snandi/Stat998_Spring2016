@@ -13,6 +13,10 @@
 %% Input header file 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{HeaderfileTexSlides}
+\usepackage[latin1]{inputenc}
+\usepackage{times}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes,shapes.geometric}
 
 %\logo{\includegraphics[scale=0.4]{uwlogo_web_sm_fl_wht.png}}
 %\logo{\includegraphics[width=\beamer@sidebarwidth,height=\beamer@headheight]{uwlogo_web_sm_fl_wht.png}}
@@ -37,6 +41,76 @@ University of Wisconsin-Madison}
 \begin{frame}
 \frametitle{Client - The Townsend Lab}
 Professor
+\end{frame}
+
+\begin{frame}
+\frametitle{Leaf Spectrometers}
+\end{frame}
+
+\begin{frame}
+\frametitle{Inter-instrument difference}
+\end{frame}
+
+%% \begin{frame}
+%% \frametitle{The spectroscopy workflow}
+%% \tikzstyle{format} = [draw, thin, fill=blue!20]
+%% \tikzstyle{medium} = [ellipse, draw, thin, fill=green!20, minimum height=2.5em]
+
+%% \begin{figure}
+%% \begin{tikzpicture}[node distance=3cm, auto]
+%% %\begin{tikzpicture}[node distance=3cm, auto,>=latex', thick]
+%%     % We need to set at bounding box first. Otherwise the diagram
+%%     % will change position for each frame.
+%%     \path[use as bounding box] (-1,0) rectangle (10,-2);
+%%     \path[->]<1-> node[format] (tex) {.tex file};
+%%     \path[->]<2-> node[format, right of=tex] (dvi) {.dvi file}
+%%                   (tex) edge node {\TeX} (dvi);
+%%     \path[->]<3-> node[format, right of=dvi] (ps) {.ps file}
+%%                   node[medium, below of=dvi] (screen) {screen}
+%%                   (dvi) edge node {dvips} (ps)
+%%                         edge node[swap] {xdvi} (screen);
+%%     \path[->]<4-> node[format, right of=ps] (pdf) {.pdf file}
+%%                   node[medium, below of=ps] (print) {printer}
+%%                   (ps) edge node {ps2pdf} (pdf)
+%%                        edge node[swap] {gs} (screen)
+%%                        edge (print);
+%%     \path[->]<5-> (pdf) edge (screen)
+%%                         edge (print);
+%%     \path[->, draw]<6-> (tex) -- +(0,1) -| node[near start] {pdf\TeX} (pdf);
+%% \end{tikzpicture}
+%% \end{figure}
+%% \end{frame}
+
+\begin{frame}
+\frametitle{The spectroscopy workflow}
+\tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=red!30]
+\tikzstyle{io} = [trapezium, trapezium left angle=70, trapezium right angle=110, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=blue!30]
+\tikzstyle{process} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=orange!30]
+\tikzstyle{decision} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=green!30]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\tikzstyle{line} = [draw, -latex']
+
+\begin{figure}
+\begin{tikzpicture}[node distance=2cm]
+\node (traindata) [startstop] {Training data from ASD Probe};
+\node (model) [io, below of=traindata] {Model fitting; PLS regression};
+\node (pls) [process, below of=model] {PLS scores; Prediction coefficients};
+\node (dec) [decision, below of=pls] {Species;\\ Nitrogen content; Cellulose; Carbon};
+
+\draw [arrow] (traindata) -- (model);
+\draw [arrow] (model) -- (pls);
+\draw [arrow] (pls) -- (dec);
+
+\pause
+\node (data1) [startstop, left of=traindata, xshift=-2cm] {New data from ASD};
+\path [line] (data1) |- (pls);
+
+\pause
+\node (data2) [startstop, right of=traindata, xshift=2cm] {New data from Other instruments};
+\path [line] (data2) |- node[above]{\LARGE{no}}  (pls);
+
+\end{tikzpicture}
+\end{figure}
 \end{frame}
 
 \begin{frame}

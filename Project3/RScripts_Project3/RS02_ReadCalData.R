@@ -4,6 +4,7 @@ rm(list = objects(all.names = TRUE))
 
 ########################################################################
 ## This script is for Project 3, Stat 998, Spring 2016
+## This script reads in california data set and makes exploratory plots
 ########################################################################
 library(fda)
 library(gridExtra)
@@ -33,7 +34,7 @@ colnames_Other <- colnames(Data_cal) %w/o% c(colnames_SE, colnames_ASD)
 
 table(Data_cal$Species)
 table(Data_cal$SpeciesCat)
-table(Data_cal$Spectra)
+#table(Data_cal$Spectra)
 table(Data_cal$Instrument.x)
 table(Data_cal$Instrument.y)
 table(Data_cal$SimpleInstrument.x)
@@ -81,12 +82,44 @@ table(Data_cal$SimpleInstrument.y)
 #   theme(legend.position = 'top') +
 #   guides(color = guide_legend(title = ''))
 
-Filename.plot <- paste0(PlotPath, 'PairwisePlots_cal.pdf')
+Row <- 10
+
+Filename.plot <- paste0(PlotPath, 'PairwisePlots_withDiff.pdf')
 pdf(file = Filename.plot, onefile = T)
 for(Row in 1:nrow(Data_cal)){
-#  for(Row in 1:10){
-    LongData <- fn_longData_byRow(Data_cal, Row = Row )
-  plot(plot_pairs(LongData = LongData))
+  #  for(Row in 1:10){
+  Data <- fn_longData_byRow(Data_cal, Row = Row )
+  LongData <- Data[['LongData']]
+  DiffData <- Data[['DiffData']]
+  LongPlot <- plot_pairs(LongData = LongData)
+  DiffPlot <- plot_diff(DiffData = DiffData)
+  grid.arrange(LongPlot, DiffPlot, heights = c(3/4, 1/4))
 }
 dev.off()
 
+Data_cal1 <- Data_cal[-c(209:212),]
+
+DiffData <- fn_longData_byRow(Data_cal, Row = Row )[['DiffData']]
+Plot <- qplot() + geom_line(aes(x = Wavelength, y = Diff), data = DiffData, size = 1.5)
+Plot <- Plot + ggtitle(label = LongData$Spectra[1])
+Plot <- Plot + ylab(label = 'Difference')
+Plot <- Plot + theme(legend.position = 'top')
+Plot <- Plot + geom_hline(yintercept = 0, lty = 2)
+Plot
+
+DiffData_All <- c()
+#for(Row in 1:nrow(Data_cal1)){
+    for(Row in 1:100){
+  Data <- fn_longData_byRow(Data_cal, Row = Row )
+  DiffData <- Data[['DiffData']]
+  DiffData <- subset(DiffData, Wavelength >= 500)
+  DiffData_All <- rbind(DiffData_All, DiffData)
+  rm(Data, DiffData)
+}
+Plot <- qplot() + geom_line(aes(x = Wavelength, y = Diff, color = Species), data = DiffData_All)
+Plot <- Plot + ggtitle(label = DiffData_Al$Spectra[1])
+Plot <- Plot + ylab(label = 'Difference')
+Plot <- Plot + theme(legend.position = 'top')
+Plot <- Plot + geom_hline(yintercept = 0, lty = 2)
+Plot <- Plot + facet_wrap(~ SpeciesCat)
+Plot
