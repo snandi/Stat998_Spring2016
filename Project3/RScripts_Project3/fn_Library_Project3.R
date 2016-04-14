@@ -16,8 +16,8 @@ plot_pairs <- function(LongData){
 ###########################################################################
 plot_diff <- function(DiffData){
   Plot <- qplot() + geom_line(aes(x = Wavelength, y = Diff), data = DiffData, size = 1.5)
-  Plot <- Plot + ggtitle(label = LongData$Spectra[1])
-  Plot <- Plot + ylab(label = 'Difference')
+  #Plot <- Plot + ggtitle(label = LongData$Spectra[1])
+  Plot <- Plot + ylab(label = '')
   Plot <- Plot + theme(legend.position = 'top')
   Plot <- Plot + geom_hline(yintercept = 0, lty = 2)
 

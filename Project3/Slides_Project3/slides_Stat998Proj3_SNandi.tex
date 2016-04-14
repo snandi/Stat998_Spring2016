@@ -38,49 +38,37 @@ University of Wisconsin-Madison}
 
 \frame{\maketitle}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Client - The Townsend Lab}
 Professor
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Leaf Spectrometers}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Inter-instrument difference}
+\vspace{-0.3cm}
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.22, page=36]{../Plots/PairwisePlots_cal.pdf} \hspace{1cm}
+\includegraphics[scale=0.22, page=37]{../Plots/PairwisePlots_cal.pdf} \\
+\includegraphics[scale=0.22, page=206]{../Plots/PairwisePlots_cal.pdf} \hspace{1cm}
+\includegraphics[scale=0.22, page=207]{../Plots/PairwisePlots_cal.pdf}
+\end{figure}
+\end{center}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% \begin{frame}
-%% \frametitle{The spectroscopy workflow}
-%% \tikzstyle{format} = [draw, thin, fill=blue!20]
-%% \tikzstyle{medium} = [ellipse, draw, thin, fill=green!20, minimum height=2.5em]
-
-%% \begin{figure}
-%% \begin{tikzpicture}[node distance=3cm, auto]
-%% %\begin{tikzpicture}[node distance=3cm, auto,>=latex', thick]
-%%     % We need to set at bounding box first. Otherwise the diagram
-%%     % will change position for each frame.
-%%     \path[use as bounding box] (-1,0) rectangle (10,-2);
-%%     \path[->]<1-> node[format] (tex) {.tex file};
-%%     \path[->]<2-> node[format, right of=tex] (dvi) {.dvi file}
-%%                   (tex) edge node {\TeX} (dvi);
-%%     \path[->]<3-> node[format, right of=dvi] (ps) {.ps file}
-%%                   node[medium, below of=dvi] (screen) {screen}
-%%                   (dvi) edge node {dvips} (ps)
-%%                         edge node[swap] {xdvi} (screen);
-%%     \path[->]<4-> node[format, right of=ps] (pdf) {.pdf file}
-%%                   node[medium, below of=ps] (print) {printer}
-%%                   (ps) edge node {ps2pdf} (pdf)
-%%                        edge node[swap] {gs} (screen)
-%%                        edge (print);
-%%     \path[->]<5-> (pdf) edge (screen)
-%%                         edge (print);
-%%     \path[->, draw]<6-> (tex) -- +(0,1) -| node[near start] {pdf\TeX} (pdf);
-%% \end{tikzpicture}
-%% \end{figure}
-%% \end{frame}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{The spectroscopy workflow}
 \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=red!30]
@@ -88,7 +76,8 @@ Professor
 \tikzstyle{process} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=orange!30]
 \tikzstyle{decision} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text width=3cm, text centered, draw=black, fill=green!30]
 \tikzstyle{arrow} = [thick,->,>=stealth]
-\tikzstyle{line} = [draw, -latex']
+\tikzstyle{line} = [thick, draw, -latex']
+\tikzset{every cross out node/.append style={-, solid}}
 
 \begin{figure}
 \begin{tikzpicture}[node distance=2cm]
@@ -107,20 +96,136 @@ Professor
 
 \pause
 \node (data2) [startstop, right of=traindata, xshift=2cm] {New data from Other instruments};
-\path [line] (data2) |- node[above]{\LARGE{no}}  (pls);
+\path [line] (data2) |- node[draw=red, cross out, line width=.5ex, minimum width=1.5ex, minimum height=1ex, anchor=center]{}(pls);
+% node[very near start, yshift=0.5ex, xshift=-0.5ex,  font=\tiny] {4} (m0);
 
+\pause
+\node (cali) [io, right of=dec, xshift=2cm, yshift=0.5cm, fill=red!60] {Need \\ inter-instrument calibration!!};
 \end{tikzpicture}
 \end{figure}
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Types of discrepancy}
+\begin{columns}[t]
+\begin{column}{0.6\textwidth}
+\vspace{-0.3cm}
+\begin{center}
+\begin{figure}
+\includegraphics[scale=0.4, page=10]{../Plots/PairwisePlots_withDiff_trunc.pdf} 
+\end{figure}
+\end{center}
+\end{column}
+\pause
+
+\begin{column}{0.4\textwidth}
+\vspace{1.5cm}
+\begin{block}{Types of discrepancy}
+\begin{enumerate}
+\item Amplitude difference
+\vspace{1cm}
+\item Phase difference
+\end{enumerate}
+\end{block}
+\end{column}
+\end{columns}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Statistical problem}
+\begin{block}{Eliminate phase variability}
+Using curve registration
+\end{block}
+\vspace{1 cm}
+\pause
+\begin{block}{Estimate calibration function}
+Using function on function regression (concurrent multiple regression)
+\end{block}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Registration details}
+\begin{enumerate}
+\item Let $x(t)$ be the true curve; $y(t)$ be the curve to register. 
+\item Let $h(t)$ be the warping function; $y[h(t)]$ be the registered curve.
+\item $y[h(t)]$ and and $x(t)$ differ only in terms of amplitude variation, i.e., their values are proportional to one another across the range of $t$
+\item Then, PCA of the following order two matrix should reveal essentially one component (smallest eigen value $\approx 0$) \\
+\[C(h) = 
+\begin{bmatrix}
+\int \{x(t) \}^2dt & \int x(t) y[h(t)]dt \vspace{0.5cm} \\ 
+\int x(t) y[h(t)]dt & \int \{y[h(t)]\}^2dt
+\end{bmatrix}
+\]
+\item Choose $h(t)$ that minimizes the eigen value
+\end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Estimation of the warping function}
+\begin{enumerate}
+\item $h(t)$ is a strictly {\emph{monotone increasing}} function; Hence {\emph{invertible}}.
+\item Let $w(t) = \frac{h''(t)}{h'(t)}$ be the relative acceleration of the warping function. \\
+This will be used to {\emph{constrain}} the warping
+\item The objective function is 
+\[ \text{MINEIG}_{\lambda}(h) = \text{MINEIG}(h) + \lambda \int \{w^{(m)}(t)\}^2 dt \]
+which is similar to:
+\[ F_{\lambda}(y,x|h) = \int \|y'(t) - x'\{h(t)\} \|^2 dt + \lambda \int \{w^{(m)}(t)\}^2 dt \]
+Penalizing $w(t)$ ensures smoothness and monotonicity
+\item Express $w(t)$ in terms of B-Spline expansion: 
+\[w(t) = \sum \limits_{k=0}^{K} c_k B_k(t)\]
+Solve for the coefficients $c_k$
+\end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Functional regression framework}
+\begin{enumerate}
+\item Response: ASD $y$; Covariate: SE $w$; Abscissa: Wavelength $x$
+\item Basis expansion representation of $w$:
+\[w(x) = \sum \limits_{j=0}^{q} c_j z_j(x)\]
+Choice of basis: B-spline or PCA basis
+\item For leaf $i$, the concurrent multiple regression model is:
+\[ y_i(x) = \sum \limits_{j=0}^{q} z_{ij}(x)\beta_j(x) + \epsilon_i(x) \]
+\item In matrix form
+\[ \mathbf{y}(x) = \mathbf{Z}(x)\mathbf{\beta}(x) + \mathbf{\epsilon}(x)\]
+\end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+\frametitle{Project workflow}
+\begin{enumerate}
+\item Eliminate phase variability
+\item Choose the appropriate basis expansion for the functions
+\item Fit ASD spectroscopic values to SE values using functional regression
+\item Calibration function: Convolution of warping function from registration and fit from the regression model
+\item Estimate and compare prediction error before and after calibration 
+\item Use ``species'' as a random effect if desired
+\end{enumerate}
+\end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Questions and suggestions please}
 
 Thank you very much!
 
 \end{frame}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%% Slide x %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
 \frametitle{Reference}
 {\footnotesize{
@@ -128,6 +233,6 @@ Thank you very much!
     \bibliography{bibTex_Reference}
 }}
 \end{frame}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 

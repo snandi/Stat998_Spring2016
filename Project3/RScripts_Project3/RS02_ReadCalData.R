@@ -99,6 +99,23 @@ dev.off()
 
 Data_cal1 <- Data_cal[-c(209:212),]
 
+## Below are plots without the noisy data, truncated from 500 onwards
+Filename.plot <- paste0(PlotPath, 'PairwisePlots_withDiff_trunc.pdf')
+pdf(file = Filename.plot, onefile = T)
+for(Row in 1:nrow(Data_cal1)){
+#   for(Row in 1:10){
+  Data <- fn_longData_byRow(Data_cal1, Row = Row)
+  LongData <- Data[['LongData']]
+  DiffData <- Data[['DiffData']]
+  LongData <- subset(LongData, Wavelength >= 500)
+  DiffData <- subset(DiffData, Wavelength >= 500)
+  LongPlot <- plot_pairs(LongData = LongData)
+  DiffPlot <- plot_diff(DiffData = DiffData)
+  grid.arrange(LongPlot, DiffPlot, heights = c(2/3, 1/3))
+}
+dev.off()
+
+
 DiffData <- fn_longData_byRow(Data_cal, Row = Row )[['DiffData']]
 Plot <- qplot() + geom_line(aes(x = Wavelength, y = Diff), data = DiffData, size = 1.5)
 Plot <- Plot + ggtitle(label = LongData$Spectra[1])
