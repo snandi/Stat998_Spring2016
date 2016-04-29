@@ -99,3 +99,27 @@ fn_longData_byRow <- function(Data_cal, Row){
   
   return(list(DiffData = DiffData, LongData = LongData))  
 }
+
+########################################################################## 
+## Returns the Filename containing the coefficients of the PLS models
+########################################################################## 
+fn_getFilename <- function(Comp = c('ADF', 'Carbon', 'LMA', 'ADL', 'Cellulose', 'Nitrogen')){
+  Filename <- c(
+    'FFT_Leaf_ADF_PLSR_Coefficients_13comp.csv', 
+    'FFT_Leaf_Carbon_PLSR_Coefficients_11comp.csv',
+    'FFT_Leaf_LMA_PLSR_Coefficients_7comp.csv',
+    'FFT_Leaf_ADL_PLSR_Coefficients_13comp.csv',
+    'FFT_Leaf_Cellulose_PLSR_Coefficients_13comp.csv',
+    'FFT_Leaf_Nitrogen_PLSR_Coefficients_11comp.csv'
+  )
+  
+  Component <- c('ADF', 'Carbon', 'LMA', 'ADL', 'Cellulose', 'Nitrogen')
+  
+  FileMap <- as.data.frame(
+    cbind(Component, Filename), 
+    stringsAsFactors = FALSE
+  )
+  
+  File.Comp <- FileMap$Filename[FileMap$Component == Comp]
+  return(File.Comp)
+}
