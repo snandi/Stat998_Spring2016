@@ -123,3 +123,17 @@ fn_getFilename <- function(Comp = c('ADF', 'Carbon', 'LMA', 'ADL', 'Cellulose', 
   File.Comp <- FileMap$Filename[FileMap$Component == Comp]
   return(File.Comp)
 }
+
+########################################################################## 
+## Returns the File containing the coefficients of the PLS models
+########################################################################## 
+fn_loadScoresByComp <- function(Comp, DataPath){
+  File.Comp <- fn_getFilename(Comp = Comp)  
+  Scores.Comp <- read.table(file = paste0(DataPath, File.Comp), header = T, sep = ',')
+  Scores.Comp$X <- as.vector(Scores.Comp$X)
+  Scores.Comp$Wavelength <- as.numeric(gsub(pattern = 'Wave_', replacement = '', x = Scores.Comp$X))
+  Scores.Comp[1,'Wavelength'] <- 1
+  names(Scores.Comp)[2] <- Comp
+  return(Scores.Comp[,c('Wavelength', Comp)])
+  
+}
