@@ -54,28 +54,34 @@ fn_longData_byRow <- function(Data_cal, Row){
   Wavelength <- 350:2500
   Intensity.ASD <- as.numeric(as.vector(Data_cal[Row, colnames_ASD]))
   
-  LongData.ASD <- as.data.frame(cbind(Wavelength = Wavelength, 
-                                      Intensity = as.numeric(Intensity.ASD), 
-                                      SimpleInstr = as.vector(Data_cal[Row, 'SimpleInstrument.y']),
-                                      Instr = as.vector(Data_cal[Row, 'Instrument.y']),
-                                      Date = Data_cal[Row, 'Date.y'],
-                                      Name = as.vector(Data_cal[Row, 'Name_long.y']),
-                                      Species = as.vector(Data_cal[Row, 'Species']),
-                                      SpeciesCat = as.vector(Data_cal[Row, 'SpeciesCat']),
-                                      Spectra = as.vector(Data_cal[Row, 'Spectra'])
+  LongData.ASD <- as.data.frame(
+    cbind(
+      Wavelength = Wavelength, 
+      Intensity = as.numeric(Intensity.ASD), 
+      SimpleInstr = as.vector(Data_cal[Row, 'SimpleInstrument.y']),
+      Instr = as.vector(Data_cal[Row, 'Instrument.y']),
+      Instrument = paste(as.vector(Data_cal[Row, 'SimpleInstrument.y']), as.vector(Data_cal[Row, 'Instrument.y']), sep='_'),
+      Date = Data_cal[Row, 'Date.y'],
+      Name = as.vector(Data_cal[Row, 'Name_long.y']),
+      Species = as.vector(Data_cal[Row, 'Species']),
+      SpeciesCat = as.vector(Data_cal[Row, 'SpeciesCat']),
+      Spectra = as.vector(Data_cal[Row, 'Spectra'])
   ), stringsAsFactors = F)
   
   Intensity.SE <- as.numeric(as.vector(Data_cal[Row, colnames_SE]))
-  LongData.SE <- as.data.frame(cbind(Wavelength = Wavelength, 
-                                     Intensity = as.numeric(Intensity.SE), 
-                                     SimpleInstr = as.vector(Data_cal[Row, 'SimpleInstrument.x']),
-                                     Instr = as.vector(Data_cal[Row, 'Instrument.x']),
-                                     Date = Data_cal[Row, 'Date.x'],
-                                     Name = as.vector(Data_cal[Row, 'Name_long.x']),
-                                     Species = as.vector(Data_cal[Row, 'Species']),
-                                     SpeciesCat = as.vector(Data_cal[Row, 'SpeciesCat']),
-                                     Spectra = as.vector(Data_cal[Row, 'Spectra'])
-  ), stringsAsFactors = F)
+  LongData.SE <- as.data.frame(
+    cbind(
+      Wavelength = Wavelength, 
+      Intensity = as.numeric(Intensity.SE), 
+      SimpleInstr = as.vector(Data_cal[Row, 'SimpleInstrument.x']),
+      Instr = as.vector(Data_cal[Row, 'Instrument.x']),
+      Instrument = as.vector(Data_cal[Row, 'SimpleInstrument.x']),
+      Date = Data_cal[Row, 'Date.x'],
+      Name = as.vector(Data_cal[Row, 'Name_long.x']),
+      Species = as.vector(Data_cal[Row, 'Species']),
+      SpeciesCat = as.vector(Data_cal[Row, 'SpeciesCat']),
+      Spectra = as.vector(Data_cal[Row, 'Spectra'])
+    ), stringsAsFactors = F)
   
   LongData <- rbind(LongData.ASD, LongData.SE)
   LongData <- within(data = LongData,{
@@ -135,5 +141,23 @@ fn_loadScoresByComp <- function(Comp, DataPath){
   Scores.Comp[1,'Wavelength'] <- 1
   names(Scores.Comp)[2] <- Comp
   return(Scores.Comp[,c('Wavelength', Comp)])
+  
+}
+
+########################################################################## 
+## Returns data with two columns, one with ASD and other with SE
+## Other predictions will be added to this dataset
+########################################################################## 
+fn_longTowide <- function(LongData){
+  
+  Instrument <- unique(LongData$Instrument)[1]
+  
+  WideData_ASD <- (subset(LongData, Instrument == Instrument))[,c('Spectra', 'Wavelength', 'Intensity')]
+  names(WideData_ASD)[3] <- Instrument
+  
+  WideData_SE <- (subset(LongData, Instrument == 'SE'))[,c('Spectra', 'Wavelength', 'Intensity')]
+  names(WideData_SE)[3] <- 'SE'
+  
+  WideData <- merge(x = WideData_ASD, y = WideData_SE[,c('Wavelength', 'SE')], by = 'Wavelength')
   
 }
