@@ -15,10 +15,10 @@ fn_createCurve_FDObject <- function(lambdas = exp(-5:5), Curve = Median, Xaxis =
   }
   best <- which.min(gcvs)
   Lambda_forMedian <- lambdas[best]
-  #print(Lambda_forMedian)
+  print(Lambda_forMedian)
   pPar <- fdPar(pbasis,int2Lfd(2),lambda = Lambda_forMedian)
-  Median_ToReg_fd <- smooth.basis(argvals = Xaxis,y = Curve,fdParobj = pPar)
-  return(Median_ToReg_fd)
+  Curve.Sm <- smooth.basis(argvals = Xaxis,y = Curve,fdParobj = pPar)
+  return(list(Curve.Sm = Curve.Sm, gcvs = gcvs, Lambda_best = Lambda_forMedian))
 }
 
 ###########################################################################
