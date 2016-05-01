@@ -150,14 +150,54 @@ fn_loadScoresByComp <- function(Comp, DataPath){
 ########################################################################## 
 fn_longTowide <- function(LongData){
   
-  Instrument <- unique(LongData$Instrument)[1]
+  instrument <- unique(LongData$Instrument)[1]
   
-  WideData_ASD <- (subset(LongData, Instrument == Instrument))[,c('Spectra', 'Wavelength', 'Intensity')]
-  names(WideData_ASD)[3] <- Instrument
+  WideData_ASD <- (subset(LongData, Instrument == instrument))[,c('Spectra', 'Wavelength', 'Intensity')]
+  names(WideData_ASD)[3] <- instrument
   
   WideData_SE <- (subset(LongData, Instrument == 'SE'))[,c('Spectra', 'Wavelength', 'Intensity')]
   names(WideData_SE)[3] <- 'SE'
   
   WideData <- merge(x = WideData_ASD, y = WideData_SE[,c('Wavelength', 'SE')], by = 'Wavelength')
+
+}
+
+########################################################################## 
+## Return Prediction table, component wise, for Data_cal
+########################################################################## 
+fn_returnPredictionTable <- function(
+  Data_cal,
+  colnames_Other,
+  Comp, 
+  Instr.y, 
+  Rows = c(1:10)
+){
+  Data_cal <- subset(Data_cal, Instrument.y == Instr.y)
+  Rows <- 1:nrow(Data_cal)
   
+  PredictionTable <- Data_cal[,colnames_Other]
+  PredictionTable$Value_ASD <- 0
+  PredictionTable$Value_SE <- 0
+  PredictionTable$Error_Orig <- 0
+  PredictionTable$PctError_Orig <- 0
+  
+  for(Row in Rows){
+    # for(Row in 1:10){
+    Data <- fn_longData_byRow(Data_cal, Row = Row )
+    LongData <- Data[['LongData']]
+    WideData <- fn_longTowide(LongData = LongData)
+    
+    Instrument1 <- colnames(WideData)[3]
+    
+    Value_ASD <- sum(WideData[,Instrument1] * Scores_All[2:2152,Comp]) + Scores_All[1,Comp]
+    Value_SE <- sum(WideData[,'SE'] * Scores_All[2:2152,Comp]) + Scores_All[1,Comp]
+    Error_Orig <- Value_ASD - Value_SE
+    PctError_Orig <- abs(Error_Orig) / Value_ASD
+    
+    PredictionTable[Row, 'Value_ASD'] <- Value_ASD
+    PredictionTable[Row, 'Value_SE'] <- Value_SE
+    PredictionTable[Row, 'Error_Orig'] <- Error_Orig
+    PredictionTable[Row, 'PctError_Orig'] <- PctError_Orig
+  }
+  return(PredictionTable)
 }

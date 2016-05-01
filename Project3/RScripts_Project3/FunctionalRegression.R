@@ -17,7 +17,7 @@ library(psych)
 data(gait)
 str(gait)
 
-#demo('gait', package='fda')
+demo('gait', package='fda')
 
 gaittime <- as.numeric(dimnames(gait)[[1]])*20
 

@@ -46,14 +46,68 @@ colnames_SE <- colnames(Data_cal)[grep(pattern = "Wave_.*x", x = colnames(Data_c
 colnames_ASD <- colnames(Data_cal)[grep(pattern = "Wave_.*y", x = colnames(Data_cal))]
 colnames_Other <- colnames(Data_cal) %w/o% c(colnames_SE, colnames_ASD)
 
-Data_cal_ASD <- Data_cal[,colnames_ASD]
+Data_cal <- Data_cal[-c(209:212),]
+Table_Spectra <- table(Data_cal$Spectra)
+Table_Name.x <- table(Data_cal$Name_long.x)
+Table_Name.y <- table(Data_cal$Name_long.y)
 
-Row <- 10
-# for(Row in 1:nrow(Data_cal)){
-#   #  for(Row in 1:10){
-Data <- fn_longData_byRow(Data_cal, Row = Row )
-LongData <- Data[['LongData']]
-WideData <- fn_longTowide(LongData = LongData)
+table(Data_cal$Species)
+table(Data_cal$SpeciesCat)
 
-# }
-# dev.off()
+Comp <- 'Nitrogen'
+Instr.y <- 'FS3'
+Rows <- 1:nrow(Data_cal)
+
+########################################################################
+## Prediction table for Nitrogen, FS3 vs SE
+########################################################################
+PredictionTable_Nitrogen_FS3 <- fn_returnPredictionTable(
+  Data_cal = Data_cal, 
+  colnames_Other = colnames_Other, 
+  Comp = 'Nitrogen',
+  Instr.y = 'FS3'
+)
+
+MSPE_Orig_Nitrogen_FS3 <- sum( (PredictionTable_Nitrogen_FS3$Error_Orig)^2 ) / 
+  nrow(PredictionTable_Nitrogen_FS3)
+MAPctE_Orig_Nitrogen_FS3 <- mean(PredictionTable_Nitrogen_FS3$PctError_Orig)
+
+qplot() + geom_histogram(aes(x = Error_Orig), data = PredictionTable_Nitrogen_FS3)
+qplot() + geom_histogram(aes(x = PctError_Orig), data = PredictionTable_Nitrogen_FS3)
+
+PredictionTable_Nitrogen_FS4 <- fn_returnPredictionTable(
+  Data_cal = Data_cal, 
+  colnames_Other = colnames_Other, 
+  Comp = 'Nitrogen',
+  Instr.y = 'FS4'
+)
+MSPE_Orig_Nitrogen_FS4 <- sum( (PredictionTable_Nitrogen_FS4$Error_Orig)^2 ) / 
+  nrow(PredictionTable_Nitrogen_FS4)
+MAPctE_Orig_Nitrogen_FS4 <- mean(PredictionTable_Nitrogen_FS4$PctError_Orig)
+
+qplot() + geom_histogram(aes(x = Error_Orig), data = PredictionTable_Nitrogen_FS4)
+qplot() + geom_histogram(aes(x = PctError_Orig), data = PredictionTable_Nitrogen_FS4)
+
+########################################################################
+## Prediction table for Carbon, FS3 vs SE
+########################################################################
+PredictionTable_Carbon_FS3 <- fn_returnPredictionTable(
+  Data_cal = Data_cal, 
+  colnames_Other = colnames_Other, 
+  Comp = 'Carbon',
+  Instr.y = 'FS3'
+)
+MSPE_Orig_Carbon_FS3 <- sum( (PredictionTable_Carbon_FS3$Error_Orig)^2 ) / 
+  nrow(PredictionTable_Carbon_FS3)
+MAPctE_Orig_Carbon_FS3 <- mean(PredictionTable_Carbon_FS3$PctError_Orig)
+
+qplot() + geom_histogram(aes(x = Error_Orig), data = PredictionTable_Carbon_FS3)
+qplot() + geom_histogram(aes(x = PctError_Orig), data = PredictionTable_Carbon_FS3)
+
+Box_Carbon <- qplot() + geom_boxplot(aes(x = Species, y = PctError_Orig, fill = SpeciesCat), 
+                       data = PredictionTable_Carbon_FS3) +
+  theme(legend.position = 'top')
+Table_Species <- as.data.frame(table(PredictionTable_Carbon_FS3$Species))
+Table_Species <- subset(Table_Species, Freq > 0)
+Bar_Carbon <- qplot() + geom_bar(aes(x = Var1, y = Freq), stat = 'identity', data = as.data.frame(Table_Species))
+grid.arrange(Box_Carbon, Bar_Carbon, heights = c(3/4, 1/4))
