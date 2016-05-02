@@ -18,11 +18,11 @@ library(psych)
 ########################################################################
 ## Define folder paths
 ########################################################################
-RScriptPath <- '~/Courses/Stat998_Spring2016/Project3/RScripts_Project3/'
-DataPath <- '~/Courses/Stat998_Spring2016/Project3/Data/'
-PlotPath <- '~/Courses/Stat998_Spring2016/Project3/Plots/'
+RScriptPath <- '~/Documents/snandi/Stat998_Spring2016/Project3/RScripts_MAC/'
+DataPath <- '~/Documents/snandi/Stat998_Spring2016/Project3/Data/'
+PlotPath <- '~/Documents/snandi/Stat998_Spring2016/Project3/Plots/'
 source(paste0(RScriptPath, 'fn_Library_Project3.R'))
-source(paste0(RScriptPath, 'fn_fRegress.R'))
+#source(paste0(RScriptPath, 'fn_fRegress.R'))
 ########################################################################
 ## Load calibration data
 ########################################################################
@@ -44,9 +44,10 @@ NRow_FS3 <- nrow(Data_cal_FS3)
 set.seed(11)
 
 NRow_Train <- round(0.8*NRow_FS3, 0)
-NRow_Train <- 40
+#NRow_Train <- 80
 
 Rows_Train <- sample(x = (1:NRow_FS3), size = NRow_Train, replace = FALSE)
+#Rows_Train <- 1:NRow_Train
 Rows_Test <- (1:NRow_FS3) %w/o% Rows_Train
 
 Rows_Test
@@ -113,7 +114,7 @@ BasisBreaks <- seq(
   from        = min(Wavelength), 
   to          = max(Wavelength), 
   length.out  = NWaves/10)
-norder <- 6
+norder <- 5
 nbasis <- length(BasisBreaks) + norder - 2
 Lambda <- 0.0001
 basisobj <- create.bspline.basis(
@@ -132,6 +133,6 @@ betalist  <- list(WfdParobj, WfdParobj)
 xfdlist <- list(constfd, SE_Train.fd$fd)
 
 ### Concurrent regression 
-source(paste0(RScriptPath, 'fn_fRegress.R'))
-fRegressout <- fRegress_SN(y = ASD_FS3_Train.fd$fd, xfdlist = xfdlist, betalist = betalist)
+#source(paste0(RScriptPath, 'fn_fRegress.R'))
+fRegressout <- fRegress(y = ASD_FS3_Train.fd$fd, xfdlist = xfdlist, betalist = betalist)
 
