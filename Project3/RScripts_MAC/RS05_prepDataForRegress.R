@@ -41,7 +41,7 @@ Data_cal <- Data_cal[-c(209:212),]
 Data_cal_FS3 <- subset(Data_cal, Instrument.y == 'FS3')
 NRow_FS3 <- nrow(Data_cal_FS3)
 
-set.seed(11)
+set.seed(20)
 
 NRow_Train <- round(0.8*NRow_FS3, 0)
 #NRow_Train <- 80
@@ -66,7 +66,7 @@ NWaves <- length(Wavelength)
 BasisBreaks <- seq(
   from        = min(Wavelength), 
   to          = max(Wavelength), 
-  length.out  = NWaves/10)
+  length.out  = NWaves/5)
 norder <- 4
 nbasis <- length(BasisBreaks) + norder - 2
 
@@ -87,7 +87,7 @@ ASD_FS3_Train_FDO <- fn_createCurve_FDObject(
 ASD_FS3_Train.fd <- ASD_FS3_Train_FDO[['Curve.Sm']]
 gcvs_ASD_FS3_Train <- ASD_FS3_Train_FDO[['gcvs']]
 Lambda_ASD_FS3_Train <- ASD_FS3_Train_FDO[['Lambda_best']]
-plot(gcvs_ASD_FS3_Train)
+#plot(gcvs_ASD_FS3_Train)
 
 ASD_FS3_Train.fit <- eval.fd(evalarg = Wavelength, fdobj = ASD_FS3_Train.fd$fd)
 
@@ -103,9 +103,8 @@ SE_Train.fd <- SE_Train_FDO[['Curve.Sm']]
 gcvs_SE_Train <- SE_Train_FDO[['gcvs']]
 Lambda_SE_Train <- SE_Train_FDO[['Lambda_best']]
 
-plot(gcvs_SE_Train)
+#plot(gcvs_SE_Train)
 SE_Train.fit <- eval.fd(evalarg = Wavelength, fdobj = SE_Train.fd$fd)
-
 
 ### Create wavelength basis
 Wavelength <- c(350:2500)
@@ -113,10 +112,10 @@ NWaves <- length(Wavelength)
 BasisBreaks <- seq(
   from        = min(Wavelength), 
   to          = max(Wavelength), 
-  length.out  = NWaves/10)
+  length.out  = NWaves/5)
 norder <- 5
 nbasis <- length(BasisBreaks) + norder - 2
-Lambda <- 0.0001
+Lambda <- 0.001
 basisobj <- create.bspline.basis(
   rangeval  = range(Wavelength), 
   norder    = norder, 
@@ -136,3 +135,26 @@ xfdlist <- list(constfd, SE_Train.fd$fd)
 #source(paste0(RScriptPath, 'fn_fRegress.R'))
 fRegressout <- fRegress(y = ASD_FS3_Train.fd$fd, xfdlist = xfdlist, betalist = betalist)
 
+names(fRegressout)
+class(fRegressout)
+betaestlist <- fRegressout[['betaestlist']]
+alpha_fd   <- betaestlist[[1]]$fd
+SE_beta_fd <- betaestlist[[2]]$fd
+
+SE_Beta <- eval.fd(evalarg = Wavelength, fdobj = SE_beta_fd)
+SE_Alpha <- eval.fd(evalarg = Wavelength, fdobj = alpha_fd)
+
+# plot(alpha_fd,   ylab="Intercept")
+# plot(SE_beta_fd, ylab="Hip coefficient")
+
+PlotCheck <- qplot(x = Wavelength, y = SE_Alpha + SE_Beta * SE_Test[,10], geom = 'line') +
+  geom_line(aes(y = ASD_FS3_Test[,10]), col = 'green') +
+  geom_line(aes(y = SE_Test[,10]), col = 'blue')
+
+
+# xfdlist_test <- list(constfd, SE_Test.fd$fd)
+# ASD_FS3_Test_hat  <- predict(
+#   object = fRegressout, 
+#   newdata = xfdlist_test, 
+#   interval = 'prediction'
+# )

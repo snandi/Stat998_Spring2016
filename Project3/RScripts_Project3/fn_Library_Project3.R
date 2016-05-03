@@ -1,4 +1,95 @@
 ########################################################################## 
+## Create basis object for Beta
+########################################################################## 
+fn_createBetaBasis <- function(
+  KnotFreq = 5, 
+  norder = 4, 
+  Lambda_roughness
+){
+  Wavelength <- c(350:2500)
+  NWaves <- length(Wavelength)
+  BasisBreaks <- seq(
+    from        = min(Wavelength), 
+    to          = max(Wavelength), 
+    length.out  = NWaves/KnotFreq)
+  nbasis <- length(BasisBreaks) + norder - 2
+  Lambda <- Lambda_roughness
+  
+  basisobj <- create.bspline.basis(
+    rangeval  = range(Wavelength), 
+    norder    = norder, 
+    breaks    = BasisBreaks
+  )
+  Wfd0 <- fd(matrix(data = 0, nrow = basisobj$nbasis, ncol = 1), basisobj)
+  WfdParobj <- fdPar(fdobj = Wfd0, Lfdobj = 2, lambda = Lambda)
+  return(WfdParobj)
+}
+
+########################################################################## 
+## Create FD objects of train or test datasets, based on different knot
+## frequency
+########################################################################## 
+fn_Data_FDObject <- function(Data, KnotFreq = 5){
+  Wavelength <- c(350:2500)
+  NWaves <- length(Wavelength)
+  BasisBreaks <- seq(
+    from        = min(Wavelength), 
+    to          = max(Wavelength), 
+    length.out  = NWaves/KnotFreq)
+  norder <- 4
+  
+  nbasis <- length(BasisBreaks) + norder - 2
+  
+  basisobj <- create.bspline.basis(
+    rangeval  = range(Wavelength), 
+    norder    = norder, 
+    breaks    = BasisBreaks
+  )
+  ### ASD_FS3_Train
+  Data_FDO <- fn_createCurve_FDObject(
+    lambdas = exp(seq(-5,1,0.5)), 
+    Curve = Data,
+    Xaxis = Wavelength, 
+    pbasis = basisobj
+  )
+  Data.fd <- (Data_FDO[['Curve.Sm']])$fd
+  gcvs <- Data_FDO[['gcvs']]
+  Lambda_best <- Data_FDO[['Lambda_best']]
+  return(list(Data.fd = Data.fd, gcvs = gcvs, Lambda_best = Lambda_best))
+}
+
+########################################################################## 
+## Split dataset into training and testing set for Cross validation
+########################################################################## 
+fn_splitTrainTest <- function(
+  Data, 
+  colnames_ASD,
+  colnames_SE,
+  Seed, 
+  TrainPct = 0.8
+){
+  set.seed(Seed)
+  NRow <- nrow(Data)
+  NRow_Train <- round(TrainPct*NRow, 0)
+  
+  Rows_Train <- sample(x = (1:NRow), size = NRow_Train, replace = FALSE)
+  Rows_Test <- (1:NRow) %w/o% Rows_Train
+  
+  ASD_Train <- t(as.matrix(Data[Rows_Train,colnames_ASD]))
+  SE_Train <- t(as.matrix(Data[Rows_Train,colnames_SE]))
+  
+  ASD_Test <- t(as.matrix(Data[Rows_Test,colnames_ASD]))
+  SE_Test <- t(as.matrix(Data[Rows_Test,colnames_SE]))
+  
+  return(list(
+    ASD_Train = ASD_Train, 
+    SE_Train = SE_Train, 
+    ASD_Test = ASD_Test, 
+    SE_Test = SE_Test
+    ))
+}
+
+########################################################################## 
 ## Create a fd object of a curve, after smoothing it with bsplies
 ## This works even if Curve is a matrix
 ########################################################################## 
