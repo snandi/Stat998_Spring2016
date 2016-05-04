@@ -18,9 +18,9 @@ library(psych)
 ########################################################################
 ## Define folder paths
 ########################################################################
-RScriptPath <- '~/Documents/snandi/Stat998_Spring2016/Project3/RScripts_MAC/'
-DataPath <- '~/Documents/snandi/Stat998_Spring2016/Project3/Data/'
-PlotPath <- '~/Documents/snandi/Stat998_Spring2016/Project3/Plots/'
+RScriptPath <- '~/Courses/Stat998_Spring2016/Project3/RScripts_Project3/'
+DataPath <- '~/Courses/Stat998_Spring2016/Project3/Data/'
+PlotPath <- '~/Courses/Stat998_Spring2016/Project3/Plots/'
 source(paste0(RScriptPath, 'fn_Library_Project3.R'))
 #source(paste0(RScriptPath, 'fn_fRegress.R'))
 ########################################################################
@@ -116,8 +116,8 @@ fn_returnCV_MISPE <- function(Data_cal_FS3, Seed, Lambda_roughness, KnotFreq){
 
 #fn_returnCV_MISPE(Data_cal_FS3, Seed = 15, Lambda_roughness = 0.01, KnotFreq = 8)
 
-Seeds <- c(1:5)
-KnotFreq <- c(16, 20)
+Seeds <- c(1:50)
+KnotFreq <- c(6, 10, 14, 16, 20)
 CVData <- NULL
 for(Knot in KnotFreq){
   CVData <- rbind(CVData, cbind(Seeds, Knot))
