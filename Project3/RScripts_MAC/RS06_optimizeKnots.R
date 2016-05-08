@@ -55,7 +55,7 @@ fn_returnCV_MISPE <- function(Data_cal_FS3, Seed, Lambda_roughness, KnotFreq){
   ISPE <- apply(X = Pred_Error^2, MARGIN = 2, FUN = sum)
   MISPE <- round(sum(ISPE)/length(ISPE), 4)
   
-  ## Estimate prediction error between SE fit and ASD test
+  ## Estimate prediction error between SE test and ASD test
   Error <- ASD_Test - SE_Test
   ISPE_0 <- apply(X = Error^2, MARGIN = 2, FUN = sum)
   MISPE_0 <- round(sum(ISPE_0)/length(ISPE_0), 4)

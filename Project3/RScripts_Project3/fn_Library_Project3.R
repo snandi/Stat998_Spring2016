@@ -4,9 +4,10 @@
 fn_createBetaBasis <- function(
   KnotFreq = 5, 
   norder = 4, 
-  Lambda_roughness
+  Lambda_roughness, 
+  Wavelength = c(350:2500)
 ){
-  Wavelength <- c(350:2500)
+
   NWaves <- length(Wavelength)
   BasisBreaks <- seq(
     from        = min(Wavelength), 
@@ -21,7 +22,7 @@ fn_createBetaBasis <- function(
     breaks    = BasisBreaks
   )
   Wfd0 <- fd(matrix(data = 0, nrow = basisobj$nbasis, ncol = 1), basisobj)
-  WfdParobj <- fdPar(fdobj = Wfd0, Lfdobj = 2, lambda = Lambda)
+  WfdParobj <- fdPar(fdobj = Wfd0, Lfdobj = (norder - 2), lambda = Lambda)
   return(WfdParobj)
 }
 
@@ -29,8 +30,11 @@ fn_createBetaBasis <- function(
 ## Create FD objects of train or test datasets, based on different knot
 ## frequency
 ########################################################################## 
-fn_Data_FDObject <- function(Data, KnotFreq = 5){
-  Wavelength <- c(350:2500)
+fn_Data_FDObject <- function(
+  Data, 
+  KnotFreq = 5,
+  Wavelength = c(350:2500)
+){
   NWaves <- length(Wavelength)
   BasisBreaks <- seq(
     from        = min(Wavelength), 
@@ -141,8 +145,12 @@ plot_diff <- function(DiffData){
 ###########################################################################
 ## This function prepares the data in the long format, for 1 leaf at a time
 ###########################################################################
-fn_longData_byRow <- function(Data_cal, Row){
-  Wavelength <- 350:2500
+fn_longData_byRow <- function(
+  Data_cal, 
+  Row, 
+  Wavelength = 350:2500
+){
+
   Intensity.ASD <- as.numeric(as.vector(Data_cal[Row, colnames_ASD]))
   
   LongData.ASD <- as.data.frame(
@@ -155,6 +163,7 @@ fn_longData_byRow <- function(Data_cal, Row){
       Date = Data_cal[Row, 'Date.y'],
       Name = as.vector(Data_cal[Row, 'Name_long.y']),
       Species = as.vector(Data_cal[Row, 'Species']),
+      species = as.vector(Data_cal[Row, 'species']),
       SpeciesCat = as.vector(Data_cal[Row, 'SpeciesCat']),
       Spectra = as.vector(Data_cal[Row, 'Spectra'])
   ), stringsAsFactors = F)
@@ -170,6 +179,7 @@ fn_longData_byRow <- function(Data_cal, Row){
       Date = Data_cal[Row, 'Date.x'],
       Name = as.vector(Data_cal[Row, 'Name_long.x']),
       Species = as.vector(Data_cal[Row, 'Species']),
+      species = as.vector(Data_cal[Row, 'species']),
       SpeciesCat = as.vector(Data_cal[Row, 'SpeciesCat']),
       Spectra = as.vector(Data_cal[Row, 'Spectra'])
     ), stringsAsFactors = F)
@@ -186,6 +196,7 @@ fn_longData_byRow <- function(Data_cal, Row){
                                   Diff = as.numeric(Intensity.Diff), 
                                   Name = as.vector(Data_cal[Row, 'Name_long.x']),
                                   Species = as.vector(Data_cal[Row, 'Species']),
+                                  species = as.vector(Data_cal[Row, 'species']),
                                   SpeciesCat = as.vector(Data_cal[Row, 'SpeciesCat']),
                                   Spectra = as.vector(Data_cal[Row, 'Spectra'])
   ), stringsAsFactors = F)

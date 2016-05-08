@@ -1,6 +1,49 @@
 \section*{Statistical methodology and results} \label{Sec_Methods}
 
-\subsection*{Model fitting for Yield}
-A mixed effects model was fit, with the following covariates:
-\[ Y_{ijklmp} = \mu + \alpha_i + \beta_j + \gamma_{k(j)} + \delta_l + \eta_{m(l)} + \nu_p + \epsilon_{ijklmpq} \]
+The goal of this analysis is to fit the measurements from SE instrument to the measurements from ASD instruments. Both instruments have intensity measurements for wavelengths from 350 to 2500 nm. These intensity measurements, although recorded as discrete values of wavelengths, can be considered a smooth function over the wavelength domain. We used the concurrent regression model with both the response and the covariate being functional data. The model can be represented as:
+\begin{equation}
+y_i(w) = \beta_0(w) + x_i(w) \beta_1(w) + \epsilon_i(w) 
+\label{eq:Eq3.1}
+\end{equation} 
+where, \\
+$350 \leq w \leq 2500$, \\
+$y_i(w)$ is the ASD measurement of leaf $i$ at wavelength $w$,\\ 
+$x_i(w)$ is the SE measurement of leaf $i$ at wavelength $w$, \\
+$\beta_0(w)$ is the intercept function to be estimated \\
+$\beta_1(w)$ is the coefficient function to be estimated. \\
+Instead of modeling each leaf separately, we modeled the mean behavior of the SE measurements with that of the ASD measurements. 
+
+The weighted regularized fitting criterion for eq.\ref{eq:Eq3.1} is 
+\[ \text{SSE}(\beta_j) = \int \mathbf{r}(w)'\mathbf{r}(w)dw + \sum \limits_{j = 1} ^p \lambda_j \int [L_j(\beta_j(w)]^2 dw  \]
+where, $\mathbf{r}(w) = \mathbf{y}(w) - \mathbf{X}(w)\beta(w)$ and $L_j(\beta_j)$ are derivatives of the coefficient functions to penalize when estimating the smooth functions. One critical step when solving for $\beta_j$ is to assume they are smooth functions and expand them in terms of basis expansions. For example, let $\beta_j$ have the expansion
+\[ \beta_j(w) = \sum \limits_{k = 1} ^{K_j} b_{k_j}\theta_{k_j} (w) = \theta_j(w)'\mathbf{b_j} \]
+in terms of $K_j$ basis functions $\theta_{k_j}$. Two important aspects of fitting this model are
+\begin{enumerate}
+\item To choose the right number of basis functions ($n_b$) to estimate the coefficient function, in order to avoid overfitting or underfitting the data. 
+\item To choose the size of the penalty $\lambda$ to appropriately estimate the smooth coefficient function.
+\end{enumerate}
+Both these parameters were chosen using cross-validation. 
+
+\subsection*{Cross validation for $\lambda$ and $n_b$}
+A 5-fold cross validation was designed to choose the best $\lambda$ and the appropriate number of basis functions. B-spline basis systems are defined by the following:
+\begin{itemize}
+\item the break points defining subintervals,
+\item the degree or order of the polynomial segments, and
+\item the sequence of knots.
+\end{itemize}
+The number $n_b$ of basis functions in a spline basis system is determined by the relation
+\[ \text{number of basis functions} = \text{order} + \text{number of knots} \]
+The cross validation performed only on the leaves that had measurements from SE and ASD-FS3. There were a total of 178 leaves. Randomly 80\% of this data was used as the ``training'' set and the rest as ``testing'' set. Fourth order b-spline basis was chosen, both for smoothing the intensity functions and the coefficient function $\beta_1(w)$. The different knot frequencies tested were 6, 10, 14, 18, 22 wavelengths. For example, with knot frequency 10, there will be a knot at every 10 wavelengths, resulting in 215 knots, and hence $n_b = 4 + 215 = 219$. More frequent knots could result in over-fitting the data and too infrequent knots could result in over-smoothing the data.
+
+Three values of $\lambda$ were tried: 0.1, 0.01 and 0.001. Smaller values of $\lambda$ ould penalize the $D_3(\beta(w))$ less and would result in more wiggles whereas higher values of $\lambda$ would result in smoother functions.
+
+The coefficients were estimated using the ``training'' set and were used to predict the values of the ``testing'' set. Then the mean integrated squared prediction error (MISPE) was estimated and compared. MISPE is defined as:
+\begin{equation}
+\text{MISPE} = \frac{1}{N} \sum \limits_{i = 1} ^{N} \int \{y(w) - \hat{y}(w)\}^2dw
+\end{equation}
+For each value of knot-frequency and $\lambda$, 50 independent sets of estimation was conducted. Below is a plot of the cross validation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Enter cross validation results here %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
