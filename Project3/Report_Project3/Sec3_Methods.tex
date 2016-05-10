@@ -41,9 +41,15 @@ The coefficients were estimated using the ``training'' set and were used to pred
 \begin{equation}
 \text{MISPE} = \frac{1}{N} \sum \limits_{i = 1} ^{N} \int \{y(w) - \hat{y}(w)\}^2dw
 \end{equation}
-For each value of knot-frequency and $\lambda$, 50 independent sets of estimation was conducted. Below is a plot of the cross validation.
+For each value of knot-frequency and $\lambda$, 50 independent sets of estimation was conducted. It turned out that different values of $\lambda$ didn't impact the MISPE very much. Below is a boxplot of MISPE for different values of knot-frequency. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Enter cross validation results here %%%
+%%% Cross validation results
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{../RScripts_Project3/CVResults.pdf}
+\caption{Boxplot of MISPE by knot frequency}
+\label{fig:Fig3.1}
+\end{figure}
 
