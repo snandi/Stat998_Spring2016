@@ -1,14 +1,18 @@
 \section*{Summary} \label{Sec_Summary}
 \subsection*{Introduction}
-inter instrument calibration
-blah
-blah
+Imaging spectroscopy is used by scientists in detecting different physical and chemical properties of leaves. Different spectrometers are used to obtain intensity measurements of leaves. Statistical models, such as partial least square regression (PLS), are used to classify the leaves into different species, or even detect physical properties of the leaves, such as carbon content, nitrogen content, etc. However, different spectrometers have different in-built calibration settings and models built on measurements from one instrument are not conformable to measurements from another instrument. Hence, it is imperative that measurements from any two spectrometers are conformable. 
 
+\begin{figure}[H]
+\centering
+\includegraphics[scale = 0.2]{../Slides_Project3/spec1.jpg}
+\hspace{1cm}
+\includegraphics[scale = 0.42]{../Slides_Project3/spec_asd.jpg}
+\caption{Different spectrometers}
+\label{fig:Fig1.1}
+\end{figure}
 
 \subsection*{Objective}
-In addition to the total yield of biomass the chemical composition of the produced biomass is also of considerable importance. The following measures are important: (i) crude protein (CP), (ii) neutral
-detergent fiber (NDF) and NDFD, the fraction of NDF that can be digested, (iii) 
+The data consists of measurements from two spectrometers (ASD and SE) for 219 leaves, of 19 different species. The spectroscopic data is for wavelengths from 350 to 2500 nm. The objective of this analysis is to estimate an inter-instrument calibration function between ASD and SE. The methodology developed for the estimation of this calibration function should be seamlessly usable for a similar analysis between any two spectrometers. 
 
 \subsection*{Findings}
-A mixed effects model was fit, with year, location, and replication being random effects and vegetation types, sorghum types (and sub-types) being fixed effects. Following is a summary of the main findings:
-
+A concurrent regression model was fit between two functional data. The response function was the measurements from ASD, and the covariate function was the measurements from SE. The inter-instrument calibration function was estimated as a smooth intercept function and a smooth coefficient function. The smooth functions were estimated by expanding them in terms of b-spline basis functions. 

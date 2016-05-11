@@ -139,7 +139,6 @@ Table_species <- subset(Table_species, Var1 != 'Others')
 Bar_Carbon <- qplot() + geom_bar(aes(x = Var1, y = Freq), stat = 'identity', data = as.data.frame(Table_species))
 Bar_Carbon <- Bar_Carbon + xlab(label = '') + ylab(label = 'Frequency')
 
-
 Filename <- paste0(PlotPath, 'PredictionError_FS3_SE.pdf')
 pdf(file = Filename, onefile = T)
 print(Plot_Nitrogen_FS3)

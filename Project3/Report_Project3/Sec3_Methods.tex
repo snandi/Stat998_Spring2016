@@ -39,7 +39,7 @@ Three values of $\lambda$ were tried: 0.1, 0.01 and 0.001. Smaller values of $\l
 
 The coefficients were estimated using the ``training'' set and were used to predict the values of the ``testing'' set. Then the mean integrated squared prediction error (MISPE) was estimated and compared. MISPE is defined as:
 \begin{equation}
-\text{MISPE} = \frac{1}{N} \sum \limits_{i = 1} ^{N} \int \{y(w) - \hat{y}(w)\}^2dw
+\text{MISPE} = \frac{1}{N} \sum \limits_{i = 1} ^{N} \int\limits_{w_1}^{w_2} \{y_i(w) - \hat{y_i}(w)\}^2dw
 \end{equation}
 For each value of knot-frequency and $\lambda$, 50 independent sets of estimation was conducted. It turned out that different values of $\lambda$ didn't impact the MISPE very much. Below is a boxplot of MISPE for different values of knot-frequency. 
 
@@ -82,4 +82,30 @@ Below are plots of the ASD-FS3 measurements, SE measurements, and the fitted val
 \label{fig:Fig3.3}
 \end{figure}
 
-The MISE (Mean integrated squared error) between ASD-FS3 and SE is 3.7487. The MISE between ASD-FS3 and SE-fitted is 1.6662. 
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c}
+\hline
+& Between ASD-FS3 and SE & Between ASD-FS3 and SE-fitted \\
+\hline
+MISE & 3.7487 & 1.6662 \\
+\hline
+\end{tabular}
+\caption{Improvement of squared error after fitting concurrent regression model}
+\label{tab:tab3.1}
+\end{table}
+
+Table \ref{tab:tab3.1} clearly shows a significant reduction in integrated squared error between ASD-FS3 and SE measurements, where MISE is defined as:
+\begin{equation}
+\text{MISE} = \frac{1}{N} \sum \limits_{i = 1} ^{N} \int\limits_{w_1}^{w_2} \{y_i(w) - x_i(w)\}^2dw
+\end{equation}
+
+\subsection*{Confidence interval}
+The confidence intervals for the intercept and coefficient functions were estimated using bootstrap procedure, with the following setup:
+\begin{itemize}
+\item Number of bootstrap samples: $B = 500$
+\item Boostrap sample size: $n = 100$
+\item For each bootstrap sample, estimate $\beta_0^{(p)}(w)$ and $\beta_1^{(p)}(w)$
+\item Pointwise bootstrap confidence interval: $\bar{y}_B(w) \pm \text{SE}_B(w)$, where, \\
+$\text{SE}_B(w) = \sqrt{\frac{1}{B - 1} \sum\limits_{p = 1}^B [y^{(p)}(w) - \bar{y}_B(w)]^2}$
+\end{itemize}

@@ -110,7 +110,7 @@ for(Curve in 1:NRow_FS3){
     geom_line(aes(y = Data_SE[,Curve]), col = 'red') +
     ylab(label = '') + 
     xlab('Red: Original SE, Blue: ASD, Black: Fitted SE') +
-    ggtitle(label = paste(as.vector(Data_cal_FS3[50, 'Spectra'])))
+    ggtitle(label = paste(as.vector(Data_cal_FS3[Curve, 'Spectra'])))
   plot(Plot)
   rm(Plot)
 }
