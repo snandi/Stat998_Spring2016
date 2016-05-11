@@ -82,16 +82,40 @@ plot(SE_beta_fd)
 SE_Alpha <- eval.fd(evalarg = Wavelength, fdobj = alpha_fd)
 SE_Beta <- eval.fd(evalarg = Wavelength, fdobj = SE_beta_fd)
 
+Plot_Beta <- qplot(x = Wavelength, y = SE_Beta, geom = 'line') +
+  ylab(label = '') + ylim(c(0, 1)) + 
+  ggtitle(label = paste('Coefficient function'))
+Plot_Beta
+
+Plot_Alpha <- qplot(x = Wavelength, y = SE_Alpha, geom = 'line') +
+  ylab(label = '') + ylim(c(0, 1)) +
+  ggtitle(label = paste('Intercept function'))
+Plot_Alpha
+
+Filename <- paste0(PlotPath, 'BetaPlots_FinalModel.pdf')
+pdf(file = Filename, onefile = T)
+plot(Plot_Alpha)
+plot(Plot_Beta)
+dev.off()
+
+
 SE_hat_fdobj <- fRegressout[['yhatfdobj']]
 SE_Fit <- eval.fd(evalarg = Wavelength, fdobj = SE_hat_fdobj$fd)
 
-Curve <- 50
-Plot <- qplot(x = Wavelength, y = SE_Fit[,Curve], geom = 'line') +
-  geom_line(aes(y = Data_ASD[,Curve]), col = 'green') +
-  geom_line(aes(y = Data_SE[,Curve]), col = 'blue') +
-  ylab(label = '') + 
-  ggtitle(label = paste('Curve', Curve))
-Plot
+Filename <- paste0(PlotPath, 'Plots_SE_Fitted.pdf')
+pdf(file = Filename, onefile = T)
+for(Curve in 1:NRow_FS3){
+  Plot <- qplot(x = Wavelength, y = SE_Fit[,Curve], geom = 'line') +
+    geom_line(aes(y = Data_ASD[,Curve]), col = 'blue') +
+    geom_line(aes(y = Data_SE[,Curve]), col = 'red') +
+    ylab(label = '') + 
+    xlab('Red: Original SE, Blue: ASD, Black: Fitted SE') +
+    ggtitle(label = paste(as.vector(Data_cal_FS3[50, 'Spectra'])))
+  plot(Plot)
+  rm(Plot)
+}
+dev.off()
+
 
 Diff_ASD <- diff(Data_ASD)
 Diff_SE <- diff(Data_SE)

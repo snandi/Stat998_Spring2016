@@ -43,9 +43,9 @@ The coefficients were estimated using the ``training'' set and were used to pred
 \end{equation}
 For each value of knot-frequency and $\lambda$, 50 independent sets of estimation was conducted. It turned out that different values of $\lambda$ didn't impact the MISPE very much. Below is a boxplot of MISPE for different values of knot-frequency. 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Cross validation results
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}[H]
 \centering
 \includegraphics[scale=0.5]{../RScripts_Project3/CVResults.pdf}
@@ -53,3 +53,33 @@ For each value of knot-frequency and $\lambda$, 50 independent sets of estimatio
 \label{fig:Fig3.1}
 \end{figure}
 
+Fig \ref{fig:Fig3.1} does not clearly exhibit a pattern between MISPE and knot-frequencies. We chose to continue with knot frequency 14. 
+
+\subsection*{Final model}
+The final model was fit with the coefficient function estimated by a $5^{\text{th}}$ order b-splines, with equidistant knots, at every 14 wavelengths. 
+\begin{equation}
+\bar{y}(w) = \beta_0(w) + \bar{x}(w) \beta_1(w) + \epsilon_i(w) 
+\label{eq:Eq3.2}
+\end{equation} 
+where, $\bar{y}$ is the mean profile of ASD measurements, and $\bar{x}$ is the mean profile  of SE measurements. Below are plots of the fits of coefficient ($\beta_1(w)$) and intercept ($\beta_0(w)$) functions.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=1]{../Plots/BetaPlots_FinalModel.pdf}
+\hspace{0.5cm}
+\includegraphics[scale=0.45, page=2]{../Plots/BetaPlots_FinalModel.pdf}
+\caption{Intercept and coefficient functions}
+\label{fig:Fig3.2}
+\end{figure}
+
+Below are plots of the ASD-FS3 measurements, SE measurements, and the fitted values of SE measurements, for two of the leaves.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=10]{../Plots/Plots_SE_Fitted.pdf}
+\hspace{0.5cm}
+\includegraphics[scale=0.45, page=26]{../Plots/Plots_SE_Fitted.pdf}
+\caption{Original and fitted values}
+\label{fig:Fig3.3}
+\end{figure}
+
+The MISE (Mean integrated squared error) between ASD-FS3 and SE is 3.7487. The MISE between ASD-FS3 and SE-fitted is 1.6662. 
