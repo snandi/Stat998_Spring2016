@@ -272,7 +272,8 @@ fn_returnPredictionTable <- function(
   colnames_Other,
   Comp, 
   Instr.y, 
-  Rows = c(1:10)
+  Rows = c(1:10),
+  Scores_All = Scores_All
 ){
   Data_cal <- subset(Data_cal, Instrument.y == Instr.y)
   Rows <- 1:nrow(Data_cal)

@@ -106,6 +106,54 @@ The confidence intervals for the intercept and coefficient functions were estima
 \item Number of bootstrap samples: $B = 500$
 \item Boostrap sample size: $n = 100$
 \item For each bootstrap sample, estimate $\beta_0^{(p)}(w)$ and $\beta_1^{(p)}(w)$
-\item Pointwise bootstrap confidence interval: $\bar{y}_B(w) \pm \text{SE}_B(w)$, where, \\
+\item Pointwise bootstrap confidence interval: $\bar{y}_B(w) \pm 2\text{SE}_B(w)$, where, \\
 $\text{SE}_B(w) = \sqrt{\frac{1}{B - 1} \sum\limits_{p = 1}^B [y^{(p)}(w) - \bar{y}_B(w)]^2}$
 \end{itemize}
+Below are plots with bootstrap confidence intervals.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.47, page=1]{../Plots/BetaPlots_Bootstrap.pdf}
+\hspace{0.5cm}
+\includegraphics[scale=0.47, page=2]{../Plots/BetaPlots_Bootstrap.pdf}
+\caption{Intercept and coefficient functions with bootstrap confidence intervals}
+\label{fig:Fig3.4}
+\end{figure}
+
+
+\subsection*{Prediction errors}
+As a consequence of fitting SE data to ASD-FS3 data, the prediction errors of the different leaf components, such as nitrogen, and carbon, have also reduced significantly. Below are the plots of the prediction errors, comparing before and after fitting. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=1]{../Plots/PredictionError_FS3_SE.pdf}
+\includegraphics[scale=0.45, page=1]{../Plots/PredictionError_FS3_SE_Fitted.pdf}
+\caption{Prediction errors for Nitrogen, using PLS scores with SE data and fitted data}
+\label{fig:Fig3.5}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=2]{../Plots/PredictionError_FS3_SE.pdf}
+\includegraphics[scale=0.45, page=2]{../Plots/PredictionError_FS3_SE_Fitted.pdf}
+\caption{Prediction errors for Carbon, using PLS scores with SE data and fitted data}
+\label{fig:Fig3.6}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|c|c}
+\hline
+\hline
+Leaf component & MSPE (Before fitting) & MSPE (After fitting) \\
+\hline
+Nitrogen & 2.23 & 0.22 \\
+Carbon & 9.88 & 2.43\\
+Cellulose & 52.76 & 38.1 \\
+\hline
+\hline
+\end{tabular}
+\caption{Mean squared prediction errors between ASD-FS3 and SE, before and after fitting}
+\label{tab:tab3.2}
+\end{table}
+
+Although there has been significant improvement in prediction errors when using the PLS scores to predict the different leaf components, there are several ways this could be improved. As shown in fig 2.2, the inter-instrument calibration function could be estimated more accurately for some species, and not for others. The accuracy of estimation could also be improved if multiple measurements per leaf, for each instrument could be used. 

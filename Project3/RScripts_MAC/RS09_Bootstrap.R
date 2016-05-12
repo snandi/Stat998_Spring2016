@@ -42,7 +42,7 @@ Data_cal_FS3 <- subset(Data_cal, Instrument.y == 'FS3')
 NRow_FS3 <- nrow(Data_cal_FS3)
 KnotFreq <- 14
 Lambda_roughness <- 1
-NBoot <- 5
+NBoot <- 200
 NData_Boot <- 100
 
 SE_Alpha_Boot <- matrix(0, nrow = 2151, ncol = NBoot)

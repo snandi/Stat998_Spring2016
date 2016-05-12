@@ -42,7 +42,6 @@ Scores_All <- Scores_All[,-2]
 Filename <- 'Common_SE_ASD_no_meta.csv'
 Data_cal <- read.csv(file = paste0(DataPath, Filename), header = T)
 
-
 Data_cal$species <- mapvalues(
   x = Data_cal$Species, 
   from = c("ABCO", "ARCTO3", "CAAN", "CAANsweet", "CADE27", "CECU", "Grape", 
@@ -69,6 +68,11 @@ Comp <- 'Nitrogen'
 Instr.y <- 'FS3'
 Rows <- 1:nrow(Data_cal)
 
+Filename <- paste0(RScriptPath, 'ASD-FS3_SE_RegFit.RData')
+load(Filename)
+Data_cal_FS3 <- subset(Data_cal, Instrument.y == 'FS3')
+Data_cal_FS3_Fit <- Data_cal_FS3
+Data_cal_FS3_Fit[,colnames_SE] <- t(SE_Fit)
 ########################################################################
 ## Prediction table for Nitrogen, FS3 vs SE
 ########################################################################
@@ -76,12 +80,15 @@ PredictionTable_Nitrogen_FS3 <- fn_returnPredictionTable(
   Data_cal = Data_cal, 
   colnames_Other = colnames_Other, 
   Comp = 'Nitrogen',
-  Instr.y = 'FS3'
+  Instr.y = 'FS3',
+  Scores_All = Scores_All
 )
 
 MSPE_Orig_Nitrogen_FS3 <- sum( (PredictionTable_Nitrogen_FS3$Error_Orig)^2 ) / 
   nrow(PredictionTable_Nitrogen_FS3)
 MAPctE_Orig_Nitrogen_FS3 <- mean(PredictionTable_Nitrogen_FS3$PctError_Orig)
+mean(MSPE_Orig_Nitrogen_FS3)
+
 
 Plot_Nitrogen_FS3 <- qplot() + 
   geom_histogram(aes(x = Error_Orig), data = PredictionTable_Nitrogen_FS3)
@@ -112,11 +119,13 @@ PredictionTable_Carbon_FS3 <- fn_returnPredictionTable(
   Data_cal = Data_cal, 
   colnames_Other = colnames_Other, 
   Comp = 'Carbon',
-  Instr.y = 'FS3'
+  Instr.y = 'FS3', 
+  Scores_All = Scores_All
 )
 MSPE_Orig_Carbon_FS3 <- sum( (PredictionTable_Carbon_FS3$Error_Orig)^2 ) / 
   nrow(PredictionTable_Carbon_FS3)
 MAPctE_Orig_Carbon_FS3 <- mean(PredictionTable_Carbon_FS3$PctError_Orig)
+mean(MSPE_Orig_Carbon_FS3)
 
 Plot_Carbon_FS3 <- qplot() + 
   geom_histogram(aes(x = Error_Orig), data = PredictionTable_Carbon_FS3)
@@ -145,3 +154,78 @@ print(Plot_Nitrogen_FS3)
 print(Plot_Carbon_FS3)
 grid.arrange(Box_Carbon, Bar_Carbon, heights = c(2/3, 1/3))
 dev.off()
+
+########################################################################
+## Prediction table for Nitrogen, FS3 vs SE fitted
+########################################################################
+PredictionTable_Nitrogen_FS3_Fitted <- fn_returnPredictionTable(
+  Data_cal = Data_cal_FS3_Fit, 
+  colnames_Other = colnames_Other, 
+  Comp = 'Nitrogen',
+  Instr.y = 'FS3',
+  Scores_All = Scores_All
+)
+
+MSPE_Orig_Nitrogen_FS3_Fitted <- sum( (PredictionTable_Nitrogen_FS3_Fitted$Error_Orig)^2 ) / 
+  nrow(PredictionTable_Nitrogen_FS3_Fitted)
+mean(MSPE_Orig_Nitrogen_FS3_Fitted)
+
+Plot_Nitrogen_FS3_Fitted <- qplot() + 
+  geom_histogram(aes(x = Error_Orig), data = PredictionTable_Nitrogen_FS3_Fitted)
+Plot_Nitrogen_FS3_Fitted <- Plot_Nitrogen_FS3_Fitted + xlab(label = 'Prediction error with fitted SE data')
+Plot_Nitrogen_FS3_Fitted <- Plot_Nitrogen_FS3_Fitted + ylab(label = 'Frequency')
+Plot_Nitrogen_FS3_Fitted <- Plot_Nitrogen_FS3_Fitted + ggtitle(label = 'Nitrogen')
+
+########################################################################
+## Prediction table for Nitrogen, FS3 vs SE fitted
+########################################################################
+PredictionTable_Carbon_FS3_Fitted <- fn_returnPredictionTable(
+  Data_cal = Data_cal_FS3_Fit, 
+  colnames_Other = colnames_Other, 
+  Comp = 'Carbon',
+  Instr.y = 'FS3',
+  Scores_All = Scores_All
+)
+MSPE_Orig_Carbon_FS3_Fitted <- sum( (PredictionTable_Carbon_FS3_Fitted$Error_Orig)^2 ) / 
+  nrow(PredictionTable_Carbon_FS3_Fitted)
+mean(MSPE_Orig_Carbon_FS3_Fitted)
+
+Plot_Carbon_FS3_Fitted <- qplot() + 
+  geom_histogram(aes(x = Error_Orig), data = PredictionTable_Carbon_FS3_Fitted)
+Plot_Carbon_FS3_Fitted <- Plot_Carbon_FS3_Fitted + xlab(label = 'Prediction error with fitted SE data')
+Plot_Carbon_FS3_Fitted <- Plot_Carbon_FS3_Fitted + ylab(label = 'Frequency')
+Plot_Carbon_FS3_Fitted <- Plot_Carbon_FS3_Fitted + ggtitle(label = 'Carbon')
+
+Filename <- paste0(PlotPath, 'PredictionError_FS3_SE_Fitted.pdf')
+pdf(file = Filename, onefile = T)
+print(Plot_Nitrogen_FS3_Fitted)
+print(Plot_Carbon_FS3_Fitted)
+dev.off()
+
+########################################################################
+## Prediction table for Cellulose, FS3 vs SE
+########################################################################
+PredictionTable_Cellulose_FS3 <- fn_returnPredictionTable(
+  Data_cal = Data_cal, 
+  colnames_Other = colnames_Other, 
+  Comp = 'Cellulose',
+  Instr.y = 'FS3',
+  Scores_All = Scores_All
+)
+MSPE_Orig_Cellulose_FS3 <- sum( (PredictionTable_Cellulose_FS3$Error_Orig)^2 ) / 
+  nrow(PredictionTable_Cellulose_FS3)
+mean(MSPE_Orig_Cellulose_FS3)
+
+########################################################################
+## Prediction table for Cellulose, FS3 vs SE Fitted
+########################################################################
+PredictionTable_Cellulose_FS3_Fitted <- fn_returnPredictionTable(
+  Data_cal = Data_cal_FS3_Fit, 
+  colnames_Other = colnames_Other, 
+  Comp = 'Cellulose',
+  Instr.y = 'FS3',
+  Scores_All = Scores_All
+)
+MSPE_Fitted_Cellulose_FS3 <- sum( (PredictionTable_Cellulose_FS3_Fitted$Error_Orig)^2 ) / 
+  nrow(PredictionTable_Cellulose_FS3_Fitted)
+mean(MSPE_Fitted_Cellulose_FS3)

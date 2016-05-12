@@ -82,62 +82,49 @@ plot(SE_beta_fd)
 SE_Alpha <- eval.fd(evalarg = Wavelength, fdobj = alpha_fd)
 SE_Beta <- eval.fd(evalarg = Wavelength, fdobj = SE_beta_fd)
 
-Plot_Beta <- qplot(x = Wavelength, y = SE_Beta, geom = 'line') +
-  ylab(label = '') + ylim(c(0, 1)) + 
-  ggtitle(label = paste('Coefficient function'))
-Plot_Beta
+### Load bootstrap results
+Filename <- paste0(RScriptPath, 'Bootstrap_Results.RData')
+load(Filename)
+names(BootResults)
+rowSE_Alpha <- BootResults$rowSE_Alpha
+rowSE_Beta <- BootResults$rowSE_Beta
 
-Plot_Alpha <- qplot(x = Wavelength, y = SE_Alpha, geom = 'line') +
-  ylab(label = '') + ylim(c(0, 1)) +
-  ggtitle(label = paste('Intercept function'))
+SE_Alpha_wBoot <- as.data.frame(cbind(
+  Mean = SE_Alpha, 
+  Upper = (SE_Alpha + 2*rowSE_Alpha),
+  Lower = (SE_Alpha - 2*rowSE_Alpha)
+))
+colnames(SE_Alpha_wBoot) <- c('Mean', 'Upper', 'Lower')
+SE_Alpha_wBoot$Wavelength <- Wavelength
+
+Plot_Alpha <- qplot() + 
+  geom_smooth(aes(x = Wavelength, y = Mean, ymin = Lower, ymax = Upper), 
+              col = 'gray40', data = SE_Alpha_wBoot, stat = "identity", size = 0.5) +
+  ylab(label = '') + ylim(c(0, 1)) + 
+  ggtitle(label = paste('Intercept function with confidence interval')) +
+  theme_bw()
+
 Plot_Alpha
 
-Filename <- paste0(PlotPath, 'BetaPlots_FinalModel.pdf')
+SE_Beta_wBoot <- as.data.frame(cbind(
+  Mean = SE_Beta, 
+  Upper = (SE_Beta + 2*rowSE_Beta),
+  Lower = (SE_Beta - 2*rowSE_Beta)
+))
+colnames(SE_Beta_wBoot) <- c('Mean', 'Upper', 'Lower')
+SE_Beta_wBoot$Wavelength <- Wavelength
+
+Plot_Beta <- qplot() + 
+  geom_smooth(aes(x = Wavelength, y = Mean, ymin = Lower, ymax = Upper), 
+              col = 'gray60', data = SE_Beta_wBoot, stat = "identity", size = 0.5) +
+  ylab(label = '') + ylim(c(0, 1)) + 
+  ggtitle(label = paste('Intercept function with confidence interval')) +
+  theme_bw()
+
+Plot_Beta
+
+Filename <- paste0(PlotPath, 'BetaPlots_Bootstrap.pdf')
 pdf(file = Filename, onefile = T)
 plot(Plot_Alpha)
 plot(Plot_Beta)
 dev.off()
-
-SE_hat_fdobj <- fRegressout[['yhatfdobj']]
-SE_Fit <- eval.fd(evalarg = Wavelength, fdobj = SE_hat_fdobj$fd)
-
-Filename <- paste0(RScriptPath, 'ASD-FS3_SE_RegFit.RData')
-save(SE_Fit, file = Filename)
-
-Filename <- paste0(PlotPath, 'Plots_SE_Fitted.pdf')
-pdf(file = Filename, onefile = T)
-for(Curve in 1:NRow_FS3){
-  Plot <- qplot(x = Wavelength, y = SE_Fit[,Curve], geom = 'line') +
-    geom_line(aes(y = Data_ASD[,Curve]), col = 'blue') +
-    geom_line(aes(y = Data_SE[,Curve]), col = 'red') +
-    ylab(label = '') + 
-    xlab('Red: Original SE, Blue: ASD, Black: Fitted SE') +
-    ggtitle(label = paste(as.vector(Data_cal_FS3[Curve, 'Spectra'])))
-  plot(Plot)
-  rm(Plot)
-}
-dev.off()
-
-
-Diff_ASD <- diff(Data_ASD)
-Diff_SE <- diff(Data_SE)
-Diff_SE_Fit <- diff(SE_Fit)
-Plot_D1 <- qplot(x = Wavelength[-1], y = Diff_SE_Fit[,Curve], geom = 'line') +
-  geom_line(aes(y = Diff_ASD[,Curve]), col = 'green') +
-  geom_line(aes(y = Diff_SE[,Curve]), col = 'blue') +
-  ylab(label = '') + 
-  ggtitle(label = paste('Curve', Curve))
-Plot_D1
-
-## Estimate prediction error between SE fit and ASD test
-Pred_Error <- Data_ASD - SE_Fit
-ISPE <- apply(X = Pred_Error^2, MARGIN = 2, FUN = sum)
-MISPE <- round(sum(ISPE)/length(ISPE), 4)
-
-## Estimate prediction error between SE test and ASD test
-Error <- Data_ASD - Data_SE
-ISPE_0 <- apply(X = Error^2, MARGIN = 2, FUN = sum)
-MISPE_0 <- round(sum(ISPE_0)/length(ISPE_0), 4)
-
-MISPE
-MISPE_0
