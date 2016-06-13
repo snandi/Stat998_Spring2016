@@ -1,0 +1,65 @@
+\section*{Data Structure} \label{Sec_Data}
+
+The data consists of spectroscopic measurements of 215 leaf samples, recorded from two instruments, ASD and SE. The ASD probe had two settings FS3 and FS4. There are 178 leaf measurements from ASD-FS3 and SE, and 34 leaf measurements from ASD-FS4 and SE. For each leaf, spectroscopic measurements are for wavelengths 350 through 2500, for both the instruments. Below are intensity plots of two leaves, for both instruments. 
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=24]{../Plots/PairwisePlots_withDiff.pdf}
+\includegraphics[scale=0.45, page=34]{../Plots/PairwisePlots_withDiff.pdf}
+\caption{Plots of ASD and SE, with the difference}
+\label{fig:Fig2.1}
+\end{figure}
+The primary goal of this analysis is to establish a methodology to estimate inter-instrument calibration function, in order to minimize the difference in these measurements. Notice in fig \ref{fig:Fig2.1} that for some leaves the ASD measurements are higher than the SE measurements for most wavelengths, whereas for others, the ASD measurements are mostly lower. 
+
+There are measurements of leaves from twenty different species, with ten of them with at least 10 leaves for each instrument. It is possible that for some species there is a systematic difference in measurements between instruments. However, for the scope of this analysis, the species will not be analyzed separately. Below is an exploratory plot of the difference functions, for the species with at least 10 observations in the data set. 
+\begin{figure}[H]
+\centering
+\begin{minipage}[t]{0.6\textwidth}
+\centering
+\vspace{0pt}
+\includegraphics[scale=0.55]{../Plots/Diff_byspecies.pdf}
+\caption{Difference function by species}
+\end{minipage} \hfill
+\begin{minipage}[t]{0.3\textwidth}
+\footnotesize
+\centering
+\vspace{2cm}
+\begin{tabular}{lr}
+  \hline
+  Species & Leaves \\ 
+  \hline
+  PILA &  36 \\ 
+  CADE27 &  23 \\ 
+  QUKE &  20 \\ 
+  PICO3 &  19 \\ 
+  Grape &  14 \\ 
+  CAAN &  13 \\ 
+  QUCH2 &  11 \\ 
+  ARCTO3 &  10 \\ 
+  PEAM &  10 \\ 
+  QUWI2 &  10 \\ 
+  Others &  49 \\ 
+  \hline
+\end{tabular}
+\end{minipage}
+\label{fig:Fig2.2}
+\end{figure}
+In fig \ref{fig:Fig2.1} it is evident that the difference function in some species is consistently lower than those in others. This phenomenon could be of interest in future studies.
+
+The spectroscopic measurements are used to detect the levels of different chemical components in the leaves, like nitrogen, carbon, ADF, ADL, cellulose, LMA. Statistical models were fit using measurements from ASD instruments to estimate the predict these components. However, since the measurements from SE instruments are different from the one ASD ones, these model fits result in prediction error. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=1]{../Plots/PredictionError_FS3_SE.pdf}
+\includegraphics[scale=0.45, page=2]{../Plots/PredictionError_FS3_SE.pdf}
+\caption{Prediction errors when using PLS scores with SE data}
+\label{fig:Fig2.3}
+\end{figure}
+
+Fig \ref{fig:Fig2.3} shows that since PLS scores estimated from ASD measurements produce gross prediction error when used with SE measurements. Fig \ref{fig:Fig2.4} displays the error categorized by species with at least 10 leaves in the data set.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=3]{../Plots/PredictionError_FS3_SE.pdf}
+\caption{Prediction error of Carbon by species}
+\label{fig:Fig2.4}
+\end{figure}

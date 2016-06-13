@@ -1,0 +1,159 @@
+\section*{Statistical methodology and results} \label{Sec_Methods}
+
+The goal of this analysis is to fit the measurements from SE instrument to the measurements from ASD instruments. Both instruments have intensity measurements for wavelengths from 350 to 2500 nm. These intensity measurements, although recorded as discrete values of wavelengths, can be considered a smooth function over the wavelength domain. We used the concurrent regression model with both the response and the covariate being functional data. The model can be represented as:
+\begin{equation}
+y_i(w) = \beta_0(w) + x_i(w) \beta_1(w) + \epsilon_i(w) 
+\label{eq:Eq3.1}
+\end{equation} 
+where, \\
+$350 \leq w \leq 2500$, \\
+$y_i(w)$ is the ASD measurement of leaf $i$ at wavelength $w$,\\ 
+$x_i(w)$ is the SE measurement of leaf $i$ at wavelength $w$, \\
+$\beta_0(w)$ is the intercept function to be estimated \\
+$\beta_1(w)$ is the coefficient function to be estimated. \\
+Instead of modeling each leaf separately, we modeled the mean behavior of the SE measurements with that of the ASD measurements. 
+
+The weighted regularized fitting criterion for eq.\ref{eq:Eq3.1} is 
+\[ \text{SSE}(\beta_j) = \int \mathbf{r}(w)'\mathbf{r}(w)dw + \sum \limits_{j = 1} ^p \lambda_j \int [L_j(\beta_j(w)]^2 dw  \]
+where, $\mathbf{r}(w) = \mathbf{y}(w) - \mathbf{X}(w)\beta(w)$ and $L_j(\beta_j)$ are derivatives of the coefficient functions to penalize when estimating the smooth functions. One critical step when solving for $\beta_j$ is to assume they are smooth functions and expand them in terms of basis expansions. For example, let $\beta_j$ have the expansion
+\[ \beta_j(w) = \sum \limits_{k = 1} ^{K_j} b_{k_j}\theta_{k_j} (w) = \theta_j(w)'\mathbf{b_j} \]
+in terms of $K_j$ basis functions $\theta_{k_j}$. Two important aspects of fitting this model are
+\begin{enumerate}
+\item To choose the right number of basis functions ($n_b$) to estimate the coefficient function, in order to avoid overfitting or underfitting the data. 
+\item To choose the size of the penalty $\lambda$ to appropriately estimate the smooth coefficient function.
+\end{enumerate}
+Both these parameters were chosen using cross-validation. 
+
+\subsection*{Cross validation for $\lambda$ and $n_b$}
+A 5-fold cross validation was designed to choose the best $\lambda$ and the appropriate number of basis functions. B-spline basis systems are defined by the following:
+\begin{itemize}
+\item the break points defining subintervals,
+\item the degree or order of the polynomial segments, and
+\item the sequence of knots.
+\end{itemize}
+The number $n_b$ of basis functions in a spline basis system is determined by the relation
+\[ \text{number of basis functions} = \text{order} + \text{number of knots} \]
+The cross validation performed only on the leaves that had measurements from SE and ASD-FS3. There were a total of 178 leaves. Randomly 80\% of this data was used as the ``training'' set and the rest as ``testing'' set. Fourth order b-spline basis was chosen, both for smoothing the intensity functions and the coefficient function $\beta_1(w)$. The different knot frequencies tested were 6, 10, 14, 18, 22 wavelengths. For example, with knot frequency 10, there will be a knot at every 10 wavelengths, resulting in 215 knots, and hence $n_b = 4 + 215 = 219$. More frequent knots could result in over-fitting the data and too infrequent knots could result in over-smoothing the data.
+
+Three values of $\lambda$ were tried: 0.1, 0.01 and 0.001. Smaller values of $\lambda$ ould penalize the $D_3(\beta(w))$ less and would result in more wiggles whereas higher values of $\lambda$ would result in smoother functions.
+
+The coefficients were estimated using the ``training'' set and were used to predict the values of the ``testing'' set. Then the mean integrated squared prediction error (MISPE) was estimated and compared. MISPE is defined as:
+\begin{equation}
+\text{MISPE} = \frac{1}{N} \sum \limits_{i = 1} ^{N} \int\limits_{w_1}^{w_2} \{y_i(w) - \hat{y_i}(w)\}^2dw
+\end{equation}
+For each value of knot-frequency and $\lambda$, 50 independent sets of estimation was conducted. It turned out that different values of $\lambda$ didn't impact the MISPE very much. Below is a boxplot of MISPE for different values of knot-frequency. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Cross validation results
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.5]{../RScripts_Project3/CVResults.pdf}
+\caption{Boxplot of MISPE by knot frequency}
+\label{fig:Fig3.1}
+\end{figure}
+
+Fig \ref{fig:Fig3.1} does not clearly exhibit a pattern between MISPE and knot-frequencies. We chose to continue with knot frequency 14. 
+
+\subsection*{Final model}
+The final model was fit with the coefficient function estimated by a $5^{\text{th}}$ order b-splines, with equidistant knots, at every 14 wavelengths. 
+\begin{equation}
+\bar{y}(w) = \beta_0(w) + \bar{x}(w) \beta_1(w) + \epsilon_i(w) 
+\label{eq:Eq3.2}
+\end{equation} 
+where, $\bar{y}$ is the mean profile of ASD measurements, and $\bar{x}$ is the mean profile  of SE measurements. Below are plots of the fits of coefficient ($\beta_1(w)$) and intercept ($\beta_0(w)$) functions.
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.47, page=1]{../Plots/BetaPlots_FinalModel.pdf}
+\hspace{0.5cm}
+\includegraphics[scale=0.47, page=2]{../Plots/BetaPlots_FinalModel.pdf}
+\caption{Intercept and coefficient functions}
+\label{fig:Fig3.2}
+\end{figure}
+
+Below are plots of the ASD-FS3 measurements, SE measurements, and the fitted values of SE measurements, for two of the leaves.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.47, page=10]{../Plots/Plots_SE_Fitted.pdf}
+\hspace{0.5cm}
+\includegraphics[scale=0.47, page=26]{../Plots/Plots_SE_Fitted.pdf}
+\caption{Original and fitted values}
+\label{fig:Fig3.3}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{c|c|c}
+\hline
+& Between ASD-FS3 and SE & Between ASD-FS3 and SE-fitted \\
+\hline
+MISE & 3.7487 & 1.6662 \\
+\hline
+\end{tabular}
+\caption{Improvement of squared error after fitting concurrent regression model}
+\label{tab:tab3.1}
+\end{table}
+
+Table \ref{tab:tab3.1} clearly shows a significant reduction in integrated squared error between ASD-FS3 and SE measurements, where MISE is defined as:
+\begin{equation}
+\text{MISE} = \frac{1}{N} \sum \limits_{i = 1} ^{N} \int\limits_{w_1}^{w_2} \{y_i(w) - x_i(w)\}^2dw
+\end{equation}
+
+\subsection*{Confidence interval}
+The confidence intervals for the intercept and coefficient functions were estimated using bootstrap procedure, with the following setup:
+\begin{itemize}
+\item Number of bootstrap samples: $B = 500$
+\item Boostrap sample size: $n = 100$
+\item For each bootstrap sample, estimate $\beta_0^{(p)}(w)$ and $\beta_1^{(p)}(w)$
+\item Pointwise bootstrap confidence interval: $\bar{y}_B(w) \pm 2\text{SE}_B(w)$, where, \\
+$\text{SE}_B(w) = \sqrt{\frac{1}{B - 1} \sum\limits_{p = 1}^B [y^{(p)}(w) - \bar{y}_B(w)]^2}$
+\end{itemize}
+Below are plots with bootstrap confidence intervals.
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.47, page=1]{../Plots/BetaPlots_Bootstrap.pdf}
+\hspace{0.5cm}
+\includegraphics[scale=0.47, page=2]{../Plots/BetaPlots_Bootstrap.pdf}
+\caption{Intercept and coefficient functions with bootstrap confidence intervals}
+\label{fig:Fig3.4}
+\end{figure}
+
+
+\subsection*{Prediction errors}
+As a consequence of fitting SE data to ASD-FS3 data, the prediction errors of the different leaf components, such as nitrogen, and carbon, have also reduced significantly. Below are the plots of the prediction errors, comparing before and after fitting. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=1]{../Plots/PredictionError_FS3_SE.pdf}
+\includegraphics[scale=0.45, page=1]{../Plots/PredictionError_FS3_SE_Fitted.pdf}
+\caption{Prediction errors for Nitrogen, using PLS scores with SE data and fitted data}
+\label{fig:Fig3.5}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale=0.45, page=2]{../Plots/PredictionError_FS3_SE.pdf}
+\includegraphics[scale=0.45, page=2]{../Plots/PredictionError_FS3_SE_Fitted.pdf}
+\caption{Prediction errors for Carbon, using PLS scores with SE data and fitted data}
+\label{fig:Fig3.6}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|c|c}
+\hline
+\hline
+Leaf component & MSPE (Before fitting) & MSPE (After fitting) \\
+\hline
+Nitrogen & 2.23 & 0.22 \\
+Carbon & 9.88 & 2.43\\
+Cellulose & 52.76 & 38.1 \\
+\hline
+\hline
+\end{tabular}
+\caption{Mean squared prediction errors between ASD-FS3 and SE, before and after fitting}
+\label{tab:tab3.2}
+\end{table}
+
+Although there has been significant improvement in prediction errors when using the PLS scores to predict the different leaf components, there are several ways this could be improved. As shown in fig 2.2, the inter-instrument calibration function could be estimated more accurately for some species, and not for others. The accuracy of estimation could also be improved if multiple measurements per leaf, for each instrument could be used. 

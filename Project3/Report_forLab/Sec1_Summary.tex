@@ -1,0 +1,36 @@
+\section*{Summary} \label{Sec_Summary}
+\subsection*{Introduction}
+Imaging spectroscopy is used by scientists in detecting different physical and chemical properties of leaves. Different spectrometers are used to obtain intensity measurements of leaves. Statistical models, such as partial least square regression (PLS), are used to classify the leaves into different species, or even detect physical properties of the leaves, such as carbon content, nitrogen content, etc. However, different spectrometers have different in-built calibration settings and models built on measurements from one instrument are not conformable to measurements from another instrument. Hence, it is imperative that measurements from any two spectrometers are conformable. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[scale = 0.2]{../Slides_Project3/spec1.jpg}
+\hspace{1cm}
+\includegraphics[scale = 0.42]{../Slides_Project3/spec_asd.jpg}
+\caption{Different spectrometers}
+\label{fig:Fig1.1}
+\end{figure}
+
+\subsection*{Objective}
+The data consists of measurements from two spectrometers (ASD and SE) for 219 leaves, of 19 different species. The spectroscopic data is for wavelengths from 350 to 2500 nm. The objective of this analysis is to estimate an inter-instrument calibration function between ASD and SE. The methodology developed for the estimation of this calibration function should be seamlessly usable for a similar analysis between any two spectrometers. 
+
+\subsection*{Findings}
+A concurrent regression model was fit between two functional data. The response function was the measurements from ASD, and the covariate function was the measurements from SE. The inter-instrument calibration function was estimated as a smooth intercept function and a smooth coefficient function. The smooth functions were estimated by expanding them in terms of B-Spline basis functions. After estimating the inter-instrument calibration functions, the mean integrated squared errors (MISE) between the ASD and SE measurements reduced by more than $60\%$. Consequently, the prediction errors of estimating the following leaf components reduced by the amounts listed in the table below. 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{l|c|c}
+\hline
+\hline
+Leaf component & MSPE (Before fitting) & MSPE (After fitting) \\
+\hline
+Nitrogen & 2.23 & 0.22 \\
+Carbon & 9.88 & 2.43\\
+Cellulose & 52.76 & 38.1 \\
+\hline
+\hline
+\end{tabular}
+\caption{Mean squared prediction errors between ASD-FS3 and SE, before and after fitting}
+\label{tab:tab1.1}
+\end{table}
+ 
